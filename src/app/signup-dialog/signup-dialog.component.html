@@ -1,0 +1,30 @@
+<div class="content">
+    <div class="header">
+        <h1>Sign Up</h1>
+    </div>
+    <div class="login-form">
+        <form [formGroup]="signInForm">
+            <div class="form-input">
+                <mat-form-field>
+                    <mat-label>Email Address</mat-label>
+                    <input matInput formControlName="email"/>
+                </mat-form-field>
+            </div>
+            <div class="form-input">
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput formControlName="password"/>
+                </mat-form-field>
+            </div>
+            <div class="form-input">
+                <mat-form-field>
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput formControlName="confPassword"/>
+                </mat-form-field>
+            </div>
+            <div class="button-wrapper">
+                <button mat-raised-button color="accent" type="submit">Create account</button>
+            </div>
+        </form>
+    </div>
+</div>

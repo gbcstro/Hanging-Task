@@ -1,0 +1,37 @@
+.content {
+    width: 400px;
+}
+
+h1 {
+    font-weight: 500;
+}
+
+.login-form {
+    text-align: center;
+}
+
+form mat-label {
+    font-size: 18px;
+}
+
+form mat-form-field {
+    padding: 12px;
+    width: 70%;
+}
+
+mat-form-field input {
+    padding: 8px;
+    font-size: 18px;
+}
+
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+
+.button-wrapper button{
+    padding: 8px 5rem 8px 5rem;
+    font-size: 16px;
+}

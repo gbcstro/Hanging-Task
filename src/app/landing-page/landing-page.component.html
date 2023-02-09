@@ -1,0 +1,22 @@
+<mat-toolbar color="primary">
+    <h1>Hanging Request</h1>
+</mat-toolbar>
+
+<div class="main">
+    <div class="get-started">
+        <mat-card class="card">
+            <mat-card-title>Get Started</mat-card-title>
+            <mat-card-content>
+                <div class="button-wrapper">
+                    <button mat-raised-button color="primary" (click)="loginDialog()">Login with email</button>
+                </div>
+                
+                <div class="seperator"><span>------ OR -----</span></div>
+
+                <div class="button-wrapper">
+                    <button mat-raised-button color="accent" (click)="signInDialog()">Create account</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

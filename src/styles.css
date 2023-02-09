@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("@angular/material/prebuilt-themes/deeppurple-amber.css");
+
+* {
+    border: 0;
+    margin: 0;
+    box-sizing: 0;
+}
