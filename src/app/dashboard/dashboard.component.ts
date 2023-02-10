@@ -3,6 +3,8 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../services/auth.service';
 import { AddTaskComponent } from '../add-task/add-task.component';
+import { Task } from '../model/task';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,25 +15,28 @@ export class DashboardComponent implements OnInit {
 
   user: any;
 
-  todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
+  todo: Task[] = [];
 
-  ongoing: any[] = [];
+  ongoing: Task[] = [];
 
-  done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
+  done: Task[] = [];
 
   constructor(
     private dialog: MatDialog,
     public auth: AuthService,
+    private data: DataService,
   ) { 
     
   }
 
   ngOnInit(): void {
     this.user = localStorage.getItem('user-uid');
-    console.log(this.user);
+    this.getTodo();
+    this.getOnGoing();
+    this.getDone();
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -47,6 +52,36 @@ export class DashboardComponent implements OnInit {
   addDialog(){
     return this.dialog.open(AddTaskComponent,{
       width: '600px',
+    });
+  }
+
+  getTodo(){
+    this.data.readCreateTask().subscribe(res => {
+      this.todo = res.map((e: any) => {
+        const data = e.payload.doc.data();
+        data.id = e.payload.doc.id;
+        return data;
+      });
+    });
+  }
+
+  getOnGoing(){
+    this.data.readOnGoingTask().subscribe(res => {
+      this.ongoing = res.map((e: any) => {
+        const data = e.payload.doc.data();
+        data.id = e.payload.doc.id;
+        return data;
+      });
+    });
+  }
+
+  getDone(){
+    this.data.readDoneTask().subscribe(res => {
+      this.done = res.map((e: any) => {
+        const data = e.payload.doc.data();
+        data.id = e.payload.doc.id;
+        return data;
+      });
     });
   }
 

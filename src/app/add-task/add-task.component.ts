@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { DataService } from '../services/data.service';
+import { Task } from '../model/task';
 
 @Component({
   selector: 'app-add-task',
@@ -18,6 +20,7 @@ export class AddTaskComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AddTaskComponent>,
+    private data: DataService,
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +31,20 @@ export class AddTaskComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  submit(){
+    const { title, description } = this.addTask.value;
+
+    const taskObj: Task = {
+      id: '',
+      title: title,
+      description: description,
+    }
+
+    this.data.createTask(taskObj);
+
+    this.dialogRef.close();
+
+  }
 
 
 }
