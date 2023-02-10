@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login-dialog',
@@ -13,7 +15,14 @@ export class LoginDialogComponent implements OnInit {
     password: new FormControl('',[Validators.required])
   });
 
-  constructor() { }
+  constructor(
+    private auth: AuthService,
+    private dialog: MatDialogRef<LoginDialogComponent>,
+  ) { }
+
+  onNoClick(): void {
+    this.dialog.close();
+  }
 
   ngOnInit(): void {
   }
@@ -24,6 +33,18 @@ export class LoginDialogComponent implements OnInit {
 
   get password() {
     return this.loginForm.get('password');
+  }
+
+  submit(){
+
+    const { email, password } = this.loginForm.value;
+    
+    if(!this.loginForm.valid || !email || !password){
+      return;
+    }
+    
+    this.auth.SignIn(email, password);
+    this.dialog.close();
   }
 
 }

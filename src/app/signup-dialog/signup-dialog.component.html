@@ -3,7 +3,7 @@
         <h1>Sign Up</h1>
     </div>
     <div class="login-form">
-        <form [formGroup]="signInForm">
+        <form [formGroup]="signInForm" (ngSubmit)="submit()">
             <div class="form-input">
                 <mat-form-field>
                     <mat-label>Email Address</mat-label>
@@ -13,13 +13,13 @@
             <div class="form-input">
                 <mat-form-field>
                     <mat-label>Password</mat-label>
-                    <input matInput formControlName="password"/>
+                    <input matInput type="password" formControlName="password"/>
                 </mat-form-field>
             </div>
             <div class="form-input">
                 <mat-form-field>
                     <mat-label>Confirm Password</mat-label>
-                    <input matInput formControlName="confPassword"/>
+                    <input matInput type="password" formControlName="confPassword"/>
                 </mat-form-field>
             </div>
             <div class="button-wrapper">

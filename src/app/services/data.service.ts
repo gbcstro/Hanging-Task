@@ -1,51 +1,51 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Task } from './task';
+import { Task } from '../model/task';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-
   constructor(
     private afs: AngularFirestore,
   ) { }
+  
+  uid = localStorage.getItem('user-uid');
 
   createTask(task: Task){
     task.id = this.afs.createId();
-    return this.afs.collection('to-do').add(task);
+    return this.afs.collection(this.uid + 'to-do').add(task);
   }
 
   ongoingTask(task: Task){
-    return this.afs.collection('ongoing').add(task);
+    return this.afs.collection(this.uid + 'ongoing').add(task);
   }
 
   doneTask(task: Task){
-    return this.afs.collection('done').add(task);
+    return this.afs.collection(this.uid + 'done').add(task);
   }
 
   readCreateTask(){
-    return this.afs.collection('todo').snapshotChanges();
+    return this.afs.collection(this.uid + 'todo').snapshotChanges();
   }
 
   readOnGoingTask(){
-    return this.afs.collection('ongoing').snapshotChanges();
+    return this.afs.collection(this.uid + 'ongoing').snapshotChanges();
   }
 
   readDoneTask(){
-    return this.afs.collection('done').snapshotChanges();
+    return this.afs.collection(this.uid + 'done').snapshotChanges();
   }
 
   delCreateTask(task: Task){
-    return this.afs.doc('to-do' + '/' + task.id).delete();
+    return this.afs.doc(this.uid + '/' +'to-do' + '/' + task.id).delete();
   }
 
   delOnGoingTask(task: Task){
-    return this.afs.doc('ongoing' + '/' + task.id).delete();
+    return this.afs.doc(this.uid + '/' +'ongoing' + '/' + task.id).delete();
   }
 
   delDoneTask(task: Task){
-    return this.afs.doc('done' + '/' + task.id).delete();
+    return this.afs.doc(this.uid + '/' +'done' + '/' + task.id).delete();
   }
-
 }

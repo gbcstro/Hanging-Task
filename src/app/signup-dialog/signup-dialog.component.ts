@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { LandingPageComponent } from '../landing-page/landing-page.component';
+import { AuthService } from '../services/auth.service';
 
 export function passMatchValidator(): ValidatorFn{
   return (control: AbstractControl): ValidationErrors | null => {
@@ -33,9 +36,41 @@ export class SignupDialogComponent implements OnInit {
     validators:passMatchValidator()
   });
 
-  constructor() { }
+  constructor(
+    private auth: AuthService,
+    public dialogRef: MatDialogRef<SignupDialogComponent>,
+  ) { }
 
   ngOnInit(): void {
+
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  get email() {
+    return this.signInForm.get('email');
+  }
+
+  get password() {
+    return this.signInForm.get('password');
+  }
+
+  get confPassword() {
+    return this.signInForm.get('confPassword')
+  }
+
+  submit(){
+    const {email , password} = this.signInForm.value;
+
+    if(!this.signInForm.valid || !email || !password) { 
+      return ; 
+    }
+    
+    this.auth.SignUp(email, password);
+
+    this.dialogRef.close()
   }
 
 }

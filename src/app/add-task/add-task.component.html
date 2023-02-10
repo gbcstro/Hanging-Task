@@ -1,1 +1,24 @@
-<p>add-task works!</p>
+<div class="content">
+    <h2>Add Task</h2>
+    <form [formGroup]="addTask">
+
+        <div class="form-input">
+            <mat-form-field>
+                <mat-label>Title</mat-label>
+                <input matInput formControlName="title">
+            </mat-form-field>
+        </div>
+
+        <div class="form-input">
+            <mat-form-field>
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+            </mat-form-field>  
+        </div>
+    
+        <div class="button-wrapper">
+            <button mat-raised-button color="primary" type="submit">Create task</button>
+        </div>
+
+    </form>
+</div>
