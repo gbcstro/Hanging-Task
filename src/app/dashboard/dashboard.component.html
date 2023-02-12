@@ -18,7 +18,7 @@
 
   </div>
   
-  <div class="content">
+  <div class="content"> 
       <div cdkDropListGroup>
 
           <div class="example-container">
@@ -28,20 +28,18 @@
               [cdkDropListData]="todo"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item.title}}</div>
-            </div>
-          </div>
-
-          <div class="example-container">
-              <h2>Ongoing</h2>
-              <div
-                cdkDropList
-                [cdkDropListData]="ongoing"
-                class="example-list"
-                (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let item of ongoing" cdkDrag>{{item.title}}</div>
+              <div class="example-box" *ngFor="let task of todo" (cdkDragEntered)="transferDone(task)" cdkDrag>
+                <mat-card>
+                  <h3>{{ task.title }}</h3>
+                  <span> {{ task.description }}</span>
+                  <mat-card-actions>
+                    <button mat-raised-button color="accent">Edit</button>
+                    <button mat-raised-button color="warn">Delete</button>
+                  </mat-card-actions>
+                </mat-card>
               </div>
             </div>
+         </div>
         
           <div class="example-container">
             <h2>Done</h2>
@@ -50,7 +48,15 @@
               [cdkDropListData]="done"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let item of done" cdkDrag>{{item.title}}</div>
+              <div class="example-box" *ngFor="let task of done" (cdkDragExited)="transferTodo(task)" cdkDrag>
+                <mat-card>
+                  <h3>{{ task.title }}</h3>
+                  <span> {{ task.description }}</span>
+                  <mat-card-actions>
+                    <button mat-raised-button color="warn">Delete</button>
+                  </mat-card-actions>
+                </mat-card>
+              </div>
             </div>
           </div>
 

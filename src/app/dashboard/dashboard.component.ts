@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../services/auth.service';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { Task } from '../model/task';
 import { DataService } from '../services/data.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Database } from '@angular/fire/database';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit { 
 
   user: any;
 
@@ -24,7 +26,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     public auth: AuthService,
-    private data: DataService,
+    public db: DataService,
   ) { 
     
   }
@@ -37,6 +39,10 @@ export class DashboardComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<any[]>) {
+    var id;
+    var title;
+    var description;
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -55,8 +61,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  
+
   getTodo(){
-    this.data.readCreateTask().subscribe(res => {
+    this.db.readCreateTask().subscribe(res => {
       this.todo = res.map((e: any) => {
         const data = e.payload.doc.data();
         data.id = e.payload.doc.id;
@@ -65,8 +73,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  transferTodo(task: Task){
+    console.log('Todo: '+ task);
+    this.db.recreateTask(task);
+    this.db.delDoneTask(task);
+  }
+
   getOnGoing(){
-    this.data.readOnGoingTask().subscribe(res => {
+    this.db.readOnGoingTask().subscribe(res => {
       this.ongoing = res.map((e: any) => {
         const data = e.payload.doc.data();
         data.id = e.payload.doc.id;
@@ -76,13 +90,19 @@ export class DashboardComponent implements OnInit {
   }
 
   getDone(){
-    this.data.readDoneTask().subscribe(res => {
+    this.db.readDoneTask().subscribe(res => {
       this.done = res.map((e: any) => {
         const data = e.payload.doc.data();
         data.id = e.payload.doc.id;
         return data;
       });
     });
+  }
+
+  transferDone(task: Task){
+    console.log('Done: '+ task);
+    this.db.doneTask(task);
+    this.db.delCreateTask(task);
   }
 
   signout(){

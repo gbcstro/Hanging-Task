@@ -37,7 +37,7 @@ export class AddTaskComponent implements OnInit {
     const taskObj: Task = {
       id: '',
       title: title,
-      description: description,
+      description: description
     }
 
     this.data.createTask(taskObj);
