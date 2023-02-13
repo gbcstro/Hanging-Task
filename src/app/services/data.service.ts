@@ -13,6 +13,8 @@ export class DataService {
   
   uid = localStorage.getItem('user-uid');
 
+  
+  // Todo
   createTask(task: Task){
     task.id = this.afs.createId();
     return this.afs.collection(this.uid + '-todo').add(task);
@@ -23,6 +25,7 @@ export class DataService {
   }
 
   readCreateTask(){
+    console.log('read')
     return this.afs.collection(this.uid +'-todo').snapshotChanges();
   }
 
@@ -30,6 +33,7 @@ export class DataService {
     return this.afs.doc(this.uid + '-todo' + '/' + task.id).delete();
   }
 
+  // Ongoing
   ongoingTask(task: Task){
     return this.afs.collection(this.uid + '-ongoing').add(task);
   }
@@ -38,11 +42,13 @@ export class DataService {
     return this.afs.collection(this.uid + '-ongoing').snapshotChanges();
   }
 
+
   delOnGoingTask(task: Task){
     return this.afs.doc(this.uid + '-ongoing' + '/' + task.id).delete();
   }
 
 
+  // Done
   doneTask(task: Task){
     return this.afs.collection(this.uid + '-done').add(task);
   }
@@ -51,6 +57,7 @@ export class DataService {
     return this.afs.collection(this.uid + '-done').snapshotChanges();
   }
 
+  
   delDoneTask(task: Task){
     return this.afs.doc(this.uid + '-done' + '/' + task.id).delete();
   }

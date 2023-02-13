@@ -52,6 +52,28 @@ export class DashboardComponent implements OnInit {
         event.previousIndex,
         event.currentIndex,
       );
+
+      const d = event.container.data[event.currentIndex];
+      console.log(d,'exist');
+      
+      if (this.todo.find(task => task['id'] === d['id'])){
+        this.db.recreateTask(d);
+        this.db.delDoneTask(d);
+        this.db.delOnGoingTask(d);
+      }
+
+      if (this.ongoing.find(task => task['id'] === d['id'])){
+        this.db.ongoingTask(d);
+        this.db.delCreateTask(d);
+        this.db.delDoneTask(d);
+      }
+
+      if (this.done.find(task => task['id'] === d['id'])){
+        this.db.doneTask(d);
+        this.db.delCreateTask(d);
+        this.db.delOnGoingTask(d);
+      }
+  
     }
   }
 
@@ -61,20 +83,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  
-
   getTodo(){
     this.db.readCreateTask().subscribe(res => {
       this.todo = res.map((e: any) => {
         const data = e.payload.doc.data();
         data.id = e.payload.doc.id;
+        console.log(data);
         return data;
       });
     });
   }
 
   transferTodo(task: Task){
-    console.log('Todo: '+ task);
     this.db.recreateTask(task);
     this.db.delDoneTask(task);
   }
@@ -100,7 +120,6 @@ export class DashboardComponent implements OnInit {
   }
 
   transferDone(task: Task){
-    console.log('Done: '+ task);
     this.db.doneTask(task);
     this.db.delCreateTask(task);
   }
