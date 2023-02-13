@@ -7,6 +7,7 @@ import { Task } from '../model/task';
 import { DataService } from '../services/data.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Database } from '@angular/fire/database';
+import { EditTaskComponent } from '../edit-task/edit-task.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,10 +40,7 @@ export class DashboardComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<any[]>) {
-    var id;
-    var title;
-    var description;
-
+   
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -54,7 +52,6 @@ export class DashboardComponent implements OnInit {
       );
 
       const d = event.container.data[event.currentIndex];
-      console.log(d,'exist');
       
       if (this.todo.find(task => task['id'] === d['id'])){
         this.db.recreateTask(d);
@@ -81,6 +78,18 @@ export class DashboardComponent implements OnInit {
     return this.dialog.open(AddTaskComponent,{
       width: '600px',
     });
+  }
+
+  editDialog(task: Task, text: string){
+    console.log(task)
+    var modal = this.dialog.open(EditTaskComponent, {
+      width: '600px',
+      data: {
+        task: task,
+        selector: text
+      }
+    });
+
   }
 
   getTodo(){

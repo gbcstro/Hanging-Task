@@ -1,14 +1,24 @@
-.container {
-    margin: 75px 10% 100px 10%;
-}
-
 .example-spacer {
   flex: 1 1 auto;
 }
 
+.main {
+  background-image: linear-gradient(to top, rgb(192, 155, 226), rgb(103,58,183));
+  height: auto;
+  min-height: 93.5vh;
+  width: 100%;
+}
 
 .top-content {
+  padding: 12px;
   display: flex;
+  justify-content: center;
+  color: white;
+}
+
+.content{
+  display: flex;
+  justify-content: center;
 }
 
 .button-wrapper {
@@ -25,30 +35,43 @@
     margin: 0 25px 25px 0;
     display: inline-block;
     vertical-align: top;
+    color: white;
 }
   
 .example-list {
-    border: solid 1px #ccc;
-    min-height: 60px;
+    border: solid 2px rgb(255, 255, 255);
+    height: 75vh;
     background: white;
-    border-radius: 4px;
-    overflow: hidden;
+    border-radius: 5px;
+    overflow-y: auto;
     display: block;
 }
   
 .example-box {
-  padding: 20px 10px;
-  border-bottom: solid 1px #ccc;
-  color: rgba(0, 0, 0, 0.87);
+  padding: 5px 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
-  background: white;
+  background: transparent;
   font-size: 14px;
 }
+
+.mat-card {
+  width: 400px;
+}
+
+.mat-card h3 {
+  font-weight: 500;
+  font-size: 21px;
+}
+
+.mat-card span {
+  font-size: 17px;
+}
+  
   
 .cdk-drag-preview {
   box-sizing: border-box;

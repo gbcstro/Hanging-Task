@@ -42,7 +42,6 @@ export class DataService {
     return this.afs.collection(this.uid + '-ongoing').snapshotChanges();
   }
 
-
   delOnGoingTask(task: Task){
     return this.afs.doc(this.uid + '-ongoing' + '/' + task.id).delete();
   }
@@ -61,4 +60,35 @@ export class DataService {
   delDoneTask(task: Task){
     return this.afs.doc(this.uid + '-done' + '/' + task.id).delete();
   }
+
+  //Edit Task
+  editTask(task: Task, selector: string, title: any, description: any){
+  
+    if(selector === '-todo'){
+      return this.afs.doc(this.uid + selector + '/' + task.id).update({
+        title: title,
+        description: description,
+      });
+    }
+
+    else if(selector === '-ongoing'){
+      return this.afs.doc(this.uid + selector + '/' + task.id).update({
+        title: title,
+        description: description,
+      });
+    }
+
+     else if(selector === '-done'){
+      return this.afs.doc(this.uid + selector + '/' + task.id).update({
+        title: title,
+        description: description,
+      });
+    }
+
+    else {
+      return
+    }
+
+  }
+
 }

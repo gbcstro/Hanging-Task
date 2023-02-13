@@ -31,6 +31,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/guard/auth.guard';
+import { EditTaskComponent } from './edit-task/edit-task.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { AuthGuard } from './services/guard/auth.guard';
     LoginDialogComponent,
     SignupDialogComponent,
     DashboardComponent,
-    AddTaskComponent
+    AddTaskComponent,
+    EditTaskComponent
   ],
   imports: [
     BrowserModule,

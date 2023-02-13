@@ -1,6 +1,6 @@
 <div class="content">
-    <h2>Add Task</h2>
-    <form [formGroup]="addTask" (ngSubmit)="submit()">
+    <h2>Edit Task</h2>
+    <form [formGroup]="editForm" (ngSubmit)="submit()" >
 
         <div class="form-input">
             <mat-form-field>
@@ -17,8 +17,8 @@
         </div>
     
         <div class="button-wrapper">
-            <button mat-raised-button color="primary" type="submit">Create task</button>
+            <button mat-raised-button color="primary" type="submit">Submit</button>
         </div>
 
     </form>
-</div> 
+</div>
