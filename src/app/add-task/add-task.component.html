@@ -6,6 +6,9 @@
             <mat-form-field>
                 <mat-label>Title</mat-label>
                 <input matInput formControlName="title">
+                <mat-error *ngIf="title?.errors?.['required']">
+                    mali
+                </mat-error>
             </mat-form-field>
         </div>
 
@@ -17,7 +20,7 @@
         </div>
     
         <div class="button-wrapper">
-            <button mat-raised-button color="primary" type="submit">Create task</button>
+            <button mat-raised-button color="primary" type="submit" >Create task</button>
         </div>
 
     </form>

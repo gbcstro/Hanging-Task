@@ -25,7 +25,6 @@ export class DataService {
   }
 
   readCreateTask(){
-    console.log('read')
     return this.afs.collection(this.uid +'-todo').snapshotChanges();
   }
 

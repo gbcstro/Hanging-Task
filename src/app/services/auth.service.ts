@@ -25,6 +25,7 @@ export class AuthService {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
         localStorage.setItem('user-uid', this.userData.uid);
+        console.log(this.userData.uid);
         JSON.parse(localStorage.getItem('user')!);
       } else {
         localStorage.setItem('user', 'null');
@@ -77,7 +78,7 @@ export class AuthService {
  
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
-    return user !== null && user.emailVerified !== false ? true : false;
+    return user !== null ? true : false;
   }
   
   GoogleAuth() {

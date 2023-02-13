@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DataService } from '../services/data.service';
 import { Task } from '../model/task';
@@ -24,11 +24,19 @@ export class AddTaskComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.uid);
+    
   }
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  get title() {
+    return this.addTask.get('title');
+  }
+
+  get description() {
+    return this.addTask.get('description');
   }
 
   submit(){
@@ -40,9 +48,10 @@ export class AddTaskComponent implements OnInit {
       description: description
     }
 
-    this.data.createTask(taskObj);
-
-    this.dialogRef.close();
+    if(this.addTask.value.description != '' && this.addTask.value.title != ''){
+      this.data.createTask(taskObj);
+      this.dialogRef.close();
+    }
 
   }
 

@@ -81,7 +81,6 @@ export class DashboardComponent implements OnInit {
   }
 
   editDialog(task: Task, text: string){
-    console.log(task)
     var modal = this.dialog.open(EditTaskComponent, {
       width: '600px',
       data: {
@@ -91,21 +90,15 @@ export class DashboardComponent implements OnInit {
     });
 
   }
-
+ 
   getTodo(){
     this.db.readCreateTask().subscribe(res => {
       this.todo = res.map((e: any) => {
         const data = e.payload.doc.data();
         data.id = e.payload.doc.id;
-        console.log(data);
         return data;
       });
     });
-  }
-
-  transferTodo(task: Task){
-    this.db.recreateTask(task);
-    this.db.delDoneTask(task);
   }
 
   getOnGoing(){
@@ -128,10 +121,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  transferDone(task: Task){
-    this.db.doneTask(task);
-    this.db.delCreateTask(task);
+  clearList(){
+    this.todo = [];
+    this.ongoing = [];
+    this.done = [];
   }
+  
 
   signout(){
     this.auth.SignOut()

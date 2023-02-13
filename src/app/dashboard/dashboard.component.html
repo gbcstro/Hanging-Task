@@ -53,9 +53,14 @@
                 <mat-card>
                   <h3>{{ task.title.toUpperCase() }}</h3>
                   <span> {{ task.description }}</span>
+                
                   <mat-card-actions>
-                    <button mat-raised-button color="accent" (click)="editDialog(task,'-ongoing')">Edit</button>
-                    <button mat-raised-button color="warn" (click)="db.delOnGoingTask(task)">Delete</button>
+                    <div class="button-wrapper">
+                      <button mat-raised-button color="accent" (click)="editDialog(task,'-ongoing')">Edit</button>
+                    </div>
+                    <div class="button-wrapper">
+                      <button mat-raised-button color="warn" (click)="db.delOnGoingTask(task)">Delete</button>
+                    </div>
                   </mat-card-actions>
                 </mat-card>
               </div>

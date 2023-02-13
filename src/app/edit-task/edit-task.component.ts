@@ -30,10 +30,14 @@ export class EditTaskComponent implements OnInit {
 
   submit(){
     const { title, description } = this.editForm.value
-    
-    this.db.editTask(this.task, this.selector, title, description);
 
-    this.dialog.close();
+    if ( title != '' && description != ''){
+      this.db.editTask(this.task, this.selector, title, description);
+      this.dialog.close();
+      
+    }
+
+    
   }
 
 }
