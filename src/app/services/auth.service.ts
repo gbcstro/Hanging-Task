@@ -25,7 +25,6 @@ export class AuthService {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
         localStorage.setItem('user-uid', this.userData.uid);
-        console.log(this.userData.uid);
         JSON.parse(localStorage.getItem('user')!);
       } else {
         localStorage.setItem('user', 'null');
@@ -121,6 +120,7 @@ export class AuthService {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
       localStorage.removeItem('user-uid');
+      location.reload();
       this.router.navigate(['']);
     });
   }

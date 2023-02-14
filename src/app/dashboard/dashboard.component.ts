@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import {CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../services/auth.service';
@@ -8,15 +8,16 @@ import { DataService } from '../services/data.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Database } from '@angular/fire/database';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit { 
+export class DashboardComponent implements OnInit{ 
 
-  user: any;
+  user = localStorage.getItem('user-uid');
 
   todo: Task[] = [];
 
@@ -24,19 +25,24 @@ export class DashboardComponent implements OnInit {
 
   done: Task[] = [];
 
+
   constructor(
     private dialog: MatDialog,
     public auth: AuthService,
     public db: DataService,
+    private actRoute: ActivatedRoute,
   ) { 
     
   }
 
+
   ngOnInit(): void {
-    this.user = localStorage.getItem('user-uid');
+
+   
     this.getTodo();
     this.getOnGoing();
     this.getDone();
+   
   }
 
   drop(event: CdkDragDrop<any[]>) {

@@ -8,8 +8,9 @@ import { Task } from '../model/task';
 export class DataService {
   constructor(
     private afs: AngularFirestore,
-
-  ) { }
+  ) { 
+    
+  }
   
   uid = localStorage.getItem('user-uid');
 

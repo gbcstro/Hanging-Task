@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <h1>Hanging Request</h1>
+    <h1>Hanging Task</h1>
     <span class="example-spacer"></span>
     <button mat-raised-button (click)="signout()">
       Sign Out
@@ -34,7 +34,7 @@
                   <h3>{{ task.title.toUpperCase() }}</h3>
                   <span> {{ task.description }}</span>
                   <mat-card-actions>
-                    <button mat-raised-button color="accent" (click)="editDialog(task,'-todo')">Edit</button>
+                    <button mat-raised-button color="primary" (click)="editDialog(task,'-todo')">Edit</button>
                     <button mat-raised-button color="warn" (click)="db.delCreateTask(task)" >Delete</button>
                   </mat-card-actions>
                 </mat-card>
@@ -56,7 +56,7 @@
                 
                   <mat-card-actions>
                     <div class="button-wrapper">
-                      <button mat-raised-button color="accent" (click)="editDialog(task,'-ongoing')">Edit</button>
+                      <button mat-raised-button color="primary" (click)="editDialog(task,'-ongoing')">Edit</button>
                     </div>
                     <div class="button-wrapper">
                       <button mat-raised-button color="warn" (click)="db.delOnGoingTask(task)">Delete</button>
@@ -79,7 +79,7 @@
                   <h3>{{ task.title.toUpperCase() }}</h3>
                   <span> {{ task.description }}</span>
                   <mat-card-actions>
-                    <button mat-raised-button color="accent" (click)="editDialog(task,'-done')">Edit</button>
+                    <button mat-raised-button color="primary" (click)="editDialog(task,'-done')">Edit</button>
                     <button mat-raised-button color="warn" (click)="db.delDoneTask(task)">Delete</button>
                   </mat-card-actions>
                 </mat-card>
