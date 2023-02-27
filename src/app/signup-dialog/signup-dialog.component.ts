@@ -68,8 +68,6 @@ export class SignupDialogComponent implements OnInit {
       return ; 
     }
     
-    this.auth.SignUp(email, password);
-
     this.dialogRef.close()
   }
 

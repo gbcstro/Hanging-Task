@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { User } from '../model/user';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -42,8 +43,13 @@ export class LoginDialogComponent implements OnInit {
     if(!this.loginForm.valid || !email || !password){
       return;
     }
-    
-    this.auth.SignIn(email, password);
+
+    const loginObj = {
+      email: email,
+      password: password
+    };
+
+    this.auth.login(loginObj);
     this.dialog.close();
   }
 

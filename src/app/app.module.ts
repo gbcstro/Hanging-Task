@@ -17,21 +17,13 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
-import { environment } from '../environments/environment';
-import { provideAuth,getAuth } from '@angular/fire/auth';
-import { provideDatabase,getDatabase } from '@angular/fire/database';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/guard/auth.guard';
 import { EditTaskComponent } from './edit-task/edit-task.component';
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -57,17 +49,9 @@ import { EditTaskComponent } from './edit-task/edit-task.component';
     MatFormFieldModule,
     ReactiveFormsModule,
     DragDropModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideDatabase(() => getDatabase()),
-    provideFirestore(() => getFirestore()),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
-    AngularFireDatabaseModule,
+    HttpClientModule,
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

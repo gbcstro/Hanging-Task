@@ -49,7 +49,7 @@ export class AddTaskComponent implements OnInit {
     }
 
     if(this.addTask.value.description != '' && this.addTask.value.title != ''){
-      this.data.createTask(taskObj);
+    
       this.dialogRef.close();
     }
 

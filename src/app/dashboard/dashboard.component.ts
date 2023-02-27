@@ -17,31 +17,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit{ 
 
-  user = localStorage.getItem('user-uid');
-
-  todo: Task[] = [];
-
-  ongoing: Task[] = [];
-
-  done: Task[] = [];
-
+  task: Task[] = [];
 
   constructor(
     private dialog: MatDialog,
     public auth: AuthService,
     public db: DataService,
-    private actRoute: ActivatedRoute,
   ) { 
     
   }
 
 
   ngOnInit(): void {
-
-   
-    this.getTodo();
-    this.getOnGoing();
-    this.getDone();
    
   }
 
@@ -58,24 +45,6 @@ export class DashboardComponent implements OnInit{
       );
 
       const d = event.container.data[event.currentIndex];
-      
-      if (this.todo.find(task => task['id'] === d['id'])){
-        this.db.recreateTask(d);
-        this.db.delDoneTask(d);
-        this.db.delOnGoingTask(d);
-      }
-
-      if (this.ongoing.find(task => task['id'] === d['id'])){
-        this.db.ongoingTask(d);
-        this.db.delCreateTask(d);
-        this.db.delDoneTask(d);
-      }
-
-      if (this.done.find(task => task['id'] === d['id'])){
-        this.db.doneTask(d);
-        this.db.delCreateTask(d);
-        this.db.delOnGoingTask(d);
-      }
   
     }
   }
@@ -97,45 +66,5 @@ export class DashboardComponent implements OnInit{
 
   }
  
-  getTodo(){
-    this.db.readCreateTask().subscribe(res => {
-      this.todo = res.map((e: any) => {
-        const data = e.payload.doc.data();
-        data.id = e.payload.doc.id;
-        return data;
-      });
-    });
-  }
-
-  getOnGoing(){
-    this.db.readOnGoingTask().subscribe(res => {
-      this.ongoing = res.map((e: any) => {
-        const data = e.payload.doc.data();
-        data.id = e.payload.doc.id;
-        return data;
-      });
-    });
-  }
-
-  getDone(){
-    this.db.readDoneTask().subscribe(res => {
-      this.done = res.map((e: any) => {
-        const data = e.payload.doc.data();
-        data.id = e.payload.doc.id;
-        return data;
-      });
-    });
-  }
-
-  clearList(){
-    this.todo = [];
-    this.ongoing = [];
-    this.done = [];
-  }
-  
-
-  signout(){
-    this.auth.SignOut()
-  }
 
 }
