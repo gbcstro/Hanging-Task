@@ -48,14 +48,14 @@ export class AuthService {
 
   }
 
-  buildURL(path: any){
-    return BACKEND_DOMAIN + path;
-  }
-
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.router.navigate(['/landing']);
+  }
+
+  buildURL(path: any){
+    return BACKEND_DOMAIN + path;
   }
 
 }

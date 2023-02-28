@@ -17,7 +17,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit{ 
 
-  task: Task[] = [];
+  todo: Task[] = [];
+  ongoing: Task[] = [];
+  done: Task[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -29,7 +31,7 @@ export class DashboardComponent implements OnInit{
 
 
   ngOnInit(): void {
-   
+    this.getTask();
   }
 
   drop(event: CdkDragDrop<any[]>) {
@@ -64,6 +66,23 @@ export class DashboardComponent implements OnInit{
       }
     });
 
+  }
+
+  getTask(){
+    this.db.getTasks().subscribe((res: any) => {
+      res.forEach((task: any) => {
+        if (task.status == 'todo'){
+          this.todo.push(task);
+        }
+        else if (task.status == 'ongoing'){
+          this.ongoing.push(task);
+        }
+        else if (task.status == 'done'){
+          this.done.push(task);
+        }
+      });
+
+    });
   }
   
   logout(){

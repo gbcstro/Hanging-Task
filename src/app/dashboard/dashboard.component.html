@@ -26,16 +26,16 @@
             <h2>To do</h2>
             <div
               cdkDropList
-              [cdkDropListData]="task"
+              [cdkDropListData]="todo"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let task of task" cdkDrag>
+              <div class="example-box" *ngFor="let task of todo" cdkDrag>
                 <mat-card>
-                  <h3>{{ task.title.toUpperCase() }}</h3>
+                  <h3>{{ task.title }}</h3>
                   <span> {{ task.description }}</span>
                   <mat-card-actions>
                     <button mat-raised-button color="primary" (click)="editDialog(task,'-todo')">Edit</button>
-                    <button mat-raised-button color="warn">Delete</button>
+                    <button mat-raised-button color="warn" (click)="this.db.deleteTask(task.id)">Delete</button>
                   </mat-card-actions>
                 </mat-card>
               </div>
@@ -46,10 +46,10 @@
             <h2>Ongoing</h2>
             <div
               cdkDropList
-              [cdkDropListData]="task"
+              [cdkDropListData]="ongoing"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let task of task" cdkDrag>
+              <div class="example-box" *ngFor="let task of ongoing" cdkDrag>
                 <mat-card>
                   <h3>{{ task.title.toUpperCase() }}</h3>
                   <span> {{ task.description }}</span>
@@ -71,10 +71,10 @@
             <h2>Done</h2>
             <div
               cdkDropList
-              [cdkDropListData]="task"
+              [cdkDropListData]="done"
               class="example-list"
               (cdkDropListDropped)="drop($event)">
-              <div class="example-box" *ngFor="let task of task" cdkDrag>
+              <div class="example-box" *ngFor="let task of done" cdkDrag>
                 <mat-card>
                   <h3>{{ task.title.toUpperCase() }}</h3>
                   <span> {{ task.description }}</span>

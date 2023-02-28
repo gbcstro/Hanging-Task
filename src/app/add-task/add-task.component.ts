@@ -11,7 +11,7 @@ import { Task } from '../model/task';
 })
 export class AddTaskComponent implements OnInit {
 
-  uid = localStorage.getItem('user-uid');
+  user = JSON.parse(localStorage.getItem('user')!);
 
   addTask = new FormGroup({
     title: new FormControl('',[Validators.required]),
@@ -20,7 +20,7 @@ export class AddTaskComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AddTaskComponent>,
-    private data: DataService,
+    private db: DataService,
   ) { }
 
   ngOnInit(): void {
@@ -42,14 +42,17 @@ export class AddTaskComponent implements OnInit {
   submit(){
     const { title, description } = this.addTask.value;
 
-    const taskObj: Task = {
-      id: '',
+    const taskObj = {
       title: title,
-      description: description
+      description: description,
+      status: 'todo',
+      created_by: this.user.first_name + this.user.last_name,
+      assign_to: 'unassign'
     }
 
     if(this.addTask.value.description != '' && this.addTask.value.title != ''){
-    
+      this.db.createTask(taskObj);
+      
       this.dialogRef.close();
     }
 
