@@ -29,6 +29,8 @@ export function passMatchValidator(): ValidatorFn{
 export class SignupDialogComponent implements OnInit {
 
   signInForm = new FormGroup({
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]),
     email: new FormControl('',[Validators.required, Validators.email]),
     password: new FormControl('',[Validators.required]),
     confPassword: new FormControl('', [Validators.required]),
@@ -62,13 +64,22 @@ export class SignupDialogComponent implements OnInit {
   }
 
   submit(){
-    const {email , password} = this.signInForm.value;
+    const {firstName, lastName, email, password} = this.signInForm.value;
 
-    if(!this.signInForm.valid || !email || !password) { 
+    if(!this.signInForm.valid || !email || !password || !lastName || !firstName) { 
       return ; 
     }
+
+    const sigIn = {
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      password: password
+    };
+
+    this.auth.register(sigIn);
     
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 
 }
