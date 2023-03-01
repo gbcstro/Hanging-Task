@@ -12,6 +12,7 @@ export class EditTaskComponent implements OnInit {
 
   task = this.data.task;
   selector = this.data.selector;
+  public up_task = 'hello';
 
   editForm = new FormGroup({
     title: new FormControl(this.task.title, [Validators.required]),
@@ -32,11 +33,20 @@ export class EditTaskComponent implements OnInit {
     const { title, description } = this.editForm.value
 
     if ( title != '' && description != ''){
+
+      const taskObj = {
+        title: title,
+        description: description,
+        status: this.task.status,
+        created_by: this.task.created_by,
+        assign_to: this.task.assign_to
+      }
+
+      this.db.editTask(this.task.id, taskObj);
       this.dialog.close();
       
     }
 
-    
   }
 
 }

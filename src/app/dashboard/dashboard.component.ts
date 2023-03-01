@@ -9,6 +9,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Database } from '@angular/fire/database';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DeleteTaskComponent } from '../delete-task/delete-task.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,10 +32,10 @@ export class DashboardComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.getTask();
+    this,this.getTask();
   }
 
-  drop(event: CdkDragDrop<any[]>) {
+  drop(event: CdkDragDrop<any[]>, selector: string) {
    
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -47,6 +48,42 @@ export class DashboardComponent implements OnInit{
       );
 
       const d = event.container.data[event.currentIndex];
+
+      if (selector == 'todo'){
+        const taskObj = {
+          title: d.title,
+          description: d.description,
+          status: 'todo',
+          created_by: d.created_by,
+          assign_to: d.assign_to
+        }
+
+        this.db.editTask(d.id, taskObj);
+      }
+      
+      if (selector == 'ongoing'){
+        const taskObj = {
+          title: d.title,
+          description: d.description,
+          status: 'ongoing',
+          created_by: d.created_by,
+          assign_to: d.assign_to
+        }
+
+        this.db.editTask(d.id, taskObj);
+      }
+
+      if (selector == 'done'){
+        const taskObj = {
+          title: d.title,
+          description: d.description,
+          status: 'done',
+          created_by: d.created_by,
+          assign_to: d.assign_to
+        }
+
+        this.db.editTask(d.id, taskObj);
+      }
   
     }
   }
@@ -54,21 +91,90 @@ export class DashboardComponent implements OnInit{
   addDialog(){
     return this.dialog.open(AddTaskComponent,{
       width: '600px',
+    }).afterClosed().subscribe((res: any) => {
+        this.getTask();
     });
   }
 
-  editDialog(task: Task, text: string){
+  editDialog(task: Task){
     var modal = this.dialog.open(EditTaskComponent, {
       width: '600px',
       data: {
         task: task,
-        selector: text
       }
+    }).afterClosed().subscribe(response => {
+      this.db.getSpecificTask(task.id).subscribe((res:any) =>{
+
+        let taskObj: Task = {
+          id: res.id,
+          title: res.title,
+          description: res.description,
+          status: res.status,
+          created_by: res.created_by,
+          assign_to: res.assign_to
+        }
+
+        if (res.status === 'todo') {
+          this.todo.forEach((value,index)=>{
+            if(value.id==res.id) {
+              this.todo[index] = taskObj;
+            };
+          });
+        }
+        else if (res.status === 'ongoing') {
+          this.ongoing.forEach((value,index)=>{
+            if(value.id==res.id) {
+              this.ongoing[index] = taskObj;
+            };
+          });
+        }
+        else if (res.status === 'done') {
+          this.done.forEach((value,index)=>{
+            if(value.id==res.id){
+              this.done[index] = taskObj;
+            };
+          });
+        }
+
+      });
+
     });
 
   }
 
+  delete(task: any){
+    return this.dialog.open(DeleteTaskComponent,{
+      width: '400px',
+      data: {
+
+      }
+    });
+
+    // this.db.deleteTask(task.id);
+
+    // if (task.status === 'todo') {
+    //   this.todo.forEach((value,index)=>{
+    //     if(value.id==task.id) this.todo.splice(index,1);
+    //   });
+    // }
+    // else if (task.status === 'ongoing') {
+    //   this.ongoing.forEach((value,index)=>{
+    //     if(value.id==task.id) this.ongoing.splice(index,1);
+    //   });
+    // }
+    // else if (task.status === 'done') {
+    //   this.done.forEach((value,index)=>{
+    //     if(value.id==task.id) this.done.splice(index,1);
+    //   });
+    // }
+  
+  }
+
   getTask(){
+    this.todo = [];
+    this.ongoing = [];
+    this.done = [];
+
     this.db.getTasks().subscribe((res: any) => {
       res.forEach((task: any) => {
         if (task.status == 'todo'){
@@ -84,7 +190,7 @@ export class DashboardComponent implements OnInit{
 
     });
   }
-  
+
   logout(){
     this.auth.logout();
   }

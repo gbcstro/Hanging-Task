@@ -23,7 +23,9 @@ import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/guard/auth.guard';
 import { EditTaskComponent } from './edit-task/edit-task.component';
 
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { DataService } from './services/data.service';
+import { DeleteTaskComponent } from './delete-task/delete-task.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     SignupDialogComponent,
     DashboardComponent,
     AddTaskComponent,
-    EditTaskComponent
+    EditTaskComponent,
+    DeleteTaskComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     DragDropModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

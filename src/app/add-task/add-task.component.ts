@@ -42,18 +42,19 @@ export class AddTaskComponent implements OnInit {
   submit(){
     const { title, description } = this.addTask.value;
 
-    const taskObj = {
-      title: title,
-      description: description,
-      status: 'todo',
-      created_by: this.user.first_name + this.user.last_name,
-      assign_to: 'unassign'
-    }
-
     if(this.addTask.value.description != '' && this.addTask.value.title != ''){
+
+      const taskObj = {
+        title: title,
+        description: description,
+        status: 'todo',
+        created_by: `this.user.first_name this.user.last_name`,
+        assign_to: 'unassign'
+      }
+
       this.db.createTask(taskObj);
-      
       this.dialogRef.close();
+       
     }
 
   }
