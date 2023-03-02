@@ -54,7 +54,7 @@ import { DeleteTaskComponent } from './delete-task/delete-task.component';
     DragDropModule,
     HttpClientModule,
   ],
-  providers: [DataService],
+  providers: [DataService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,17 +8,17 @@ const BACKEND_DOMAIN = 'http://127.0.0.1:8000/';
 })
 export class DataService {
 
-    addForm: any;
-    editForm: any;
+    id: any;
 
     constructor(
       private http: HttpClient,
     ) { }
 
     createTask(task: any){
-      return this.http.post(this.buildURL('/api/add'), task).subscribe({
-        next: (res: any ) => {
-          return res.task.id;
+      this.http.post(this.buildURL('/api/add'), task).subscribe({
+        next: (res: any) => {
+          let task = res.task;
+          localStorage.setItem('id',task.id);
         },
         error: err => {
           console.log(err);

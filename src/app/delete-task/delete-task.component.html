@@ -1,5 +1,5 @@
 <h1>Are you sure to delete this task?</h1>
 <div class="button-wrapper">
-    <button mat-raised-button color="warn">Yes</button>
-    <button mat-raised-button color="primary">No</button>
+    <button mat-raised-button color="warn" (click)="delete()">Yes</button>
+    <button mat-raised-button color="primary" (click)="onNoClick()">No</button>
 </div>

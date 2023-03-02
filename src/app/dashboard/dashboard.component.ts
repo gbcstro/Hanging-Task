@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit{
   todo: Task[] = [];
   ongoing: Task[] = [];
   done: Task[] = [];
+  test: any = []
 
   constructor(
     private dialog: MatDialog,
@@ -32,7 +33,7 @@ export class DashboardComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this,this.getTask();
+    this.getTask();
   }
 
   drop(event: CdkDragDrop<any[]>, selector: string) {
@@ -92,7 +93,21 @@ export class DashboardComponent implements OnInit{
     return this.dialog.open(AddTaskComponent,{
       width: '600px',
     }).afterClosed().subscribe((res: any) => {
-        this.getTask();
+        if(localStorage.getItem('id') != null){
+          let id = localStorage.getItem('id');
+          this.db.getSpecificTask(id).subscribe((res: any) => {
+            let taskObj: Task = {
+              id: res.id,
+              title: res.title,
+              description: res.description,
+              status: res.status,
+              created_by: res.created_by,
+              assign_to: res.assign_to
+            }
+            this.todo.push(taskObj);
+          });
+          localStorage.removeItem('id');
+        }
     });
   }
 
@@ -135,7 +150,7 @@ export class DashboardComponent implements OnInit{
             };
           });
         }
-
+      
       });
 
     });
@@ -146,36 +161,36 @@ export class DashboardComponent implements OnInit{
     return this.dialog.open(DeleteTaskComponent,{
       width: '400px',
       data: {
-
+        task: task,
       }
+    }).afterClosed().subscribe(res => {
+        try {
+          let id = res.data.id
+
+          if (task.status === 'todo') {
+            this.todo.forEach((value,index)=>{
+              if(value.id==id) this.todo.splice(index,1);
+            });
+          }
+          else if (task.status === 'ongoing') {
+            this.ongoing.forEach((value,index)=>{
+              if(value.id==id) this.ongoing.splice(index,1);
+            });
+          }
+          else if (task.status === 'done') {
+            this.done.forEach((value,index)=>{
+              if(value.id==id) this.done.splice(index,1);
+            });
+          }
+        } catch (error) {
+          return
+        }
     });
-
-    // this.db.deleteTask(task.id);
-
-    // if (task.status === 'todo') {
-    //   this.todo.forEach((value,index)=>{
-    //     if(value.id==task.id) this.todo.splice(index,1);
-    //   });
-    // }
-    // else if (task.status === 'ongoing') {
-    //   this.ongoing.forEach((value,index)=>{
-    //     if(value.id==task.id) this.ongoing.splice(index,1);
-    //   });
-    // }
-    // else if (task.status === 'done') {
-    //   this.done.forEach((value,index)=>{
-    //     if(value.id==task.id) this.done.splice(index,1);
-    //   });
-    // }
-  
   }
 
   getTask(){
-    this.todo = [];
-    this.ongoing = [];
-    this.done = [];
-
     this.db.getTasks().subscribe((res: any) => {
+      this.test = res;
       res.forEach((task: any) => {
         if (task.status == 'todo'){
           this.todo.push(task);
@@ -187,7 +202,6 @@ export class DashboardComponent implements OnInit{
           this.done.push(task);
         }
       });
-
     });
   }
 

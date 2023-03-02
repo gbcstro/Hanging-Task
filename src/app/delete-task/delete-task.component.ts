@@ -9,6 +9,8 @@ import { DataService } from '../services/data.service';
 })
 export class DeleteTaskComponent implements OnInit {
 
+  task = this.data.task;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private db: DataService,
@@ -16,6 +18,26 @@ export class DeleteTaskComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
   }
+
+  onNoClick(): void {
+    this.dialog.close({
+      data: {
+        id: false,
+      }
+    });
+  }
+
+  delete(){
+    this.db.deleteTask(this.task.id);
+    this.dialog.close({
+      data: {
+        id: this.task.id,
+      }
+    });
+  }
+
+  
 
 }
