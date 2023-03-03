@@ -18,10 +18,11 @@ import { DeleteTaskComponent } from '../delete-task/delete-task.component';
 })
 export class DashboardComponent implements OnInit{ 
 
+  user =  JSON.parse(localStorage.getItem('user')!);
+
   todo: Task[] = [];
   ongoing: Task[] = [];
   done: Task[] = [];
-  test: any = []
 
   constructor(
     private dialog: MatDialog,
@@ -49,6 +50,8 @@ export class DashboardComponent implements OnInit{
       );
 
       const d = event.container.data[event.currentIndex];
+      
+      
 
       if (selector == 'todo'){
         const taskObj = {
@@ -63,15 +66,41 @@ export class DashboardComponent implements OnInit{
       }
       
       if (selector == 'ongoing'){
-        const taskObj = {
+
+        let name = this.user.first_name + ' ' + this.user.last_name;
+        let assign;
+        
+        if(d.assign_to == 'unassign'){
+          assign = name;
+        } else {
+          assign = d.assign_to;
+        }
+
+        const taskOnObj = {
           title: d.title,
           description: d.description,
           status: 'ongoing',
           created_by: d.created_by,
-          assign_to: d.assign_to
+          assign_to: assign
         }
 
-        this.db.editTask(d.id, taskObj);
+        const ongoignList: Task = {
+          id: d.id,
+          title: d.title,
+          description: d.description,
+          status: 'ongoing',
+          created_by: d.created_by,
+          assign_to: assign
+        }
+
+        this.ongoing.forEach((value, index)=>{
+          if(value.id==d.id) {
+            this.ongoing[index] = ongoignList;
+          };
+        });
+
+        this.db.editTask(d.id, taskOnObj);
+
       }
 
       if (selector == 'done'){
@@ -82,7 +111,6 @@ export class DashboardComponent implements OnInit{
           created_by: d.created_by,
           assign_to: d.assign_to
         }
-
         this.db.editTask(d.id, taskObj);
       }
   
@@ -190,7 +218,6 @@ export class DashboardComponent implements OnInit{
 
   getTask(){
     this.db.getTasks().subscribe((res: any) => {
-      this.test = res;
       res.forEach((task: any) => {
         if (task.status == 'todo'){
           this.todo.push(task);

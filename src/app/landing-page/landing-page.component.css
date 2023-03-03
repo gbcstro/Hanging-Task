@@ -41,6 +41,7 @@
 }
 
 .button-wrapper button{
-    padding: 8px 5rem 8px 5rem;
+    width: 300px;
+    padding: 8px;
     font-size: 18px;
 }

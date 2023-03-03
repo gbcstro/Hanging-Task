@@ -11,8 +11,6 @@ import { DataService } from '../services/data.service';
 export class EditTaskComponent implements OnInit {
 
   task = this.data.task;
-  selector = this.data.selector;
-  public up_task = 'hello';
 
   editForm = new FormGroup({
     title: new FormControl(this.task.title, [Validators.required]),

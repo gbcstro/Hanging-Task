@@ -42,6 +42,14 @@ export class DataService {
       });
     }
 
+    assignTask(id: any, task: any){
+      return this.http.put(this.buildURL(`/api/update/{id}/assign`), task).subscribe({
+        error: err => {
+          console.log(err);
+        }
+      });
+    }
+
     deleteTask(id: any){
       return this.http.delete(this.buildURL(`/api/delete/${id}`)).subscribe({
         error: err => {

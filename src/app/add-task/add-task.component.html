@@ -6,14 +6,11 @@
             <mat-form-field>
                 <mat-label>Title</mat-label>
                 <input matInput formControlName="title">
-                <mat-error *ngIf="title?.errors?.['required']">
-                    mali
-                </mat-error>
             </mat-form-field>
         </div>
 
         <div class="form-input">
-            <mat-form-field>
+            <mat-form-field class="text">
                 <mat-label>Description</mat-label>
                 <textarea matInput formControlName="description"></textarea>
             </mat-form-field>  

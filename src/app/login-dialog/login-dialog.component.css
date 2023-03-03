@@ -1,5 +1,6 @@
 .content {
     width: 400px;
+
 }
 
 h1 {
@@ -16,7 +17,7 @@ form mat-label {
 
 form mat-form-field {
     padding: 12px;
-    width: 70%;
+    width: 295px;
 }
 
 mat-form-field input {
@@ -34,4 +35,9 @@ mat-form-field input {
 .button-wrapper button{
     padding: 8px 5rem 8px 5rem;
     font-size: 16px;
+}
+
+.footer {
+    padding: 12px;
+    text-align: center;
 }
