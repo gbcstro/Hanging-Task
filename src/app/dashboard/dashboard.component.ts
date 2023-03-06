@@ -20,6 +20,9 @@ export class DashboardComponent implements OnInit{
 
   user =  JSON.parse(localStorage.getItem('user')!);
 
+  public userList: any = [];
+  public selectedUser: string = '';
+
   todo: Task[] = [];
   ongoing: Task[] = [];
   done: Task[] = [];
@@ -32,10 +35,20 @@ export class DashboardComponent implements OnInit{
     
   }
 
-
   ngOnInit(): void {
     this.getTask();
+    
+    this.auth.getUser().subscribe(res => {
+      console.log(res);
+      this.userList = res;
+    });
+
   }
+
+  select(first: string, last: string){
+    this.selectedUser = `${first} ${last}`;
+  }
+
 
   drop(event: CdkDragDrop<any[]>, selector: string) {
    
@@ -51,15 +64,13 @@ export class DashboardComponent implements OnInit{
 
       const d = event.container.data[event.currentIndex];
       
-      
-
       if (selector == 'todo'){
         const taskObj = {
           title: d.title,
           description: d.description,
           status: 'todo',
           created_by: d.created_by,
-          assign_to: d.assign_to
+          assign_to: 'unassign'
         }
 
         this.db.editTask(d.id, taskObj);

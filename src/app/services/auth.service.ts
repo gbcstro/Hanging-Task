@@ -16,6 +16,10 @@ export class AuthService {
     private _http: HttpClient,
     private router: Router,
     ) { }
+
+  getUser(){
+    return this._http.get(this.buildURL('/api/user'));
+  }
   
   register(form: any) {
     return this._http.post(this.buildURL('/api/register'), form).subscribe({

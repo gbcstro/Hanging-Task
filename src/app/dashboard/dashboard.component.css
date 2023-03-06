@@ -18,6 +18,10 @@
   width: 100%;
 }
 
+.filter {
+  margin-bottom: 8px;
+}
+
 .top-content {
   padding: 12px;
   display: flex;
@@ -26,8 +30,8 @@
 }
 
 .content{
-  display: flex;
-  justify-content: center;
+  margin-left: 17%;
+ 
 }
 
 .button-wrapper {
@@ -52,7 +56,7 @@
     vertical-align: top;
     color: white;
 }
-  
+
 .example-list {
     height: 75vh;
     background: rgb(215,167,225);
@@ -61,12 +65,18 @@
     display: block;
 }
 
+.example-list h2 {
+  padding: 12px;
+  margin-bottom: -10px;
+  color: black;
+}
+
 .example-list::-webkit-scrollbar {
   display: none;
 }
   
 .example-box {
-  padding: 10px 7.5px;
+  padding: 4px 12px;
   display: flex;
   flex-direction: row;
   align-items: center;

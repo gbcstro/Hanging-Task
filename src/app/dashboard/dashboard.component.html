@@ -20,15 +20,25 @@
   </div>
   
   <div class="content"> 
-      <div cdkDropListGroup>
 
+      <div class="filter">
+        <button mat-raised-button [matMenuTriggerFor]="menu">User</button>
+        <mat-menu #menu="matMenu">
+          <mat-option (click)="selectedUser = ''">All</mat-option>
+          <mat-option *ngFor="let user of userList" (click)="select(user.first_name, user.last_name)">
+            {{user.first_name}} {{user.last_name}}
+          </mat-option>
+        </mat-menu>
+      </div>
+    
+      <div cdkDropListGroup>
           <div class="example-container">
-            <h2>To do</h2>
             <div
               cdkDropList
               [cdkDropListData]="todo"
               class="example-list"
               (cdkDropListDropped)="drop($event, 'todo')">
+              <h2>To do</h2>
               <div class="example-box" *ngFor="let task of todo" cdkDrag>
                 <mat-card>
                   <h3>{{ task.title }}</h3>
@@ -43,51 +53,98 @@
          </div>
 
         <div class="example-container">
-            <h2>Ongoing</h2>
             <div
               cdkDropList
               [cdkDropListData]="ongoing"
               class="example-list"
               (cdkDropListDropped)="drop($event, 'ongoing')">
+              <h2>Ongoing</h2>
               <div class="example-box" *ngFor="let task of ongoing" cdkDrag>
-                <mat-card>
-                  <h3>{{ task.title }}</h3>
-                  <span> {{ task.description }}</span>
-                  <div class="assign">
-                    <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
-                  </div>
-                  <mat-card-actions>
-                    <div class="button-wrapper">
-                      <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
+                
+                <ng-container *ngIf="selectedUser !== ''; else default ">
+                  <mat-card *ngIf="selectedUser == task.assign_to">
+                    <h3>{{ task.title }}</h3>
+                    <span> {{ task.description }}</span>
+                    <div class="assign">
+                      <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
                     </div>
-                    <div class="button-wrapper">
-                      <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
+                    <mat-card-actions>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
+                      </div>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
+                      </div>
+                    </mat-card-actions>
+                  </mat-card>
+                </ng-container>
+
+                <ng-template #default>
+                  <mat-card>
+                    <h3>{{ task.title }}</h3>
+                    <span> {{ task.description }}</span>
+                    <div class="assign">
+                      <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
                     </div>
-                  </mat-card-actions>
-                </mat-card>
+                    <mat-card-actions>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
+                      </div>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
+                      </div>
+                    </mat-card-actions>
+                  </mat-card>
+                </ng-template>
+
               </div>
             </div>
           </div>
 
           <div class="example-container">
-            <h2>Done</h2>
             <div
               cdkDropList
               [cdkDropListData]="done"
               class="example-list"
               (cdkDropListDropped)="drop($event, 'done')">
+              <h2>Done</h2>
               <div class="example-box" *ngFor="let task of done" cdkDrag>
-                <mat-card>
-                  <h3>{{ task.title }}</h3>
-                  <span> {{ task.description }}</span>
-                  <div class="assign">
-                    <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
-                  </div>
-                  <mat-card-actions>
-                    <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
-                    <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
-                  </mat-card-actions>
-                </mat-card>
+                <ng-container *ngIf="selectedUser !== ''; else default ">
+                  <mat-card *ngIf="selectedUser == task.assign_to">
+                    <h3>{{ task.title }}</h3>
+                    <span> {{ task.description }}</span>
+                    <div class="assign">
+                      <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
+                    </div>
+                    <mat-card-actions>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
+                      </div>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
+                      </div>
+                    </mat-card-actions>
+                  </mat-card>
+                </ng-container>
+
+                <ng-template #default>
+                  <mat-card>
+                    <h3>{{ task.title }}</h3>
+                    <span> {{ task.description }}</span>
+                    <div class="assign">
+                      <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
+                    </div>
+                    <mat-card-actions>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
+                      </div>
+                      <div class="button-wrapper">
+                        <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
+                      </div>
+                    </mat-card-actions>
+                  </mat-card>
+                </ng-template>
+
               </div>
             </div>
           </div>

@@ -8,6 +8,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatSelectModule} from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,6 +54,8 @@ import { DeleteTaskComponent } from './delete-task/delete-task.component';
     MatFormFieldModule,
     ReactiveFormsModule,
     DragDropModule,
+    MatMenuModule,
+    MatSelectModule,
     HttpClientModule,
   ],
   providers: [DataService, AuthService, AuthGuard],
