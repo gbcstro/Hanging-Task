@@ -52,6 +52,19 @@ export class AuthService {
 
   }
 
+  confirmEmail(token: any){
+    return this._http.post(this.buildURL('email/verify'), token).subscribe({
+      next: res => {
+        window.alert(res);
+      },
+      error: err =>{
+        window.alert(err);
+        this.router.navigate(['dashboard']);
+      }
+
+    });
+  }
+
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('user');

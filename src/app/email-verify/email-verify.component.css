@@ -1,0 +1,16 @@
+.main {
+    background-image: linear-gradient(to top, rgb(192, 155, 226), rgb(103,58,183));
+    height: auto;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.container{
+    padding-top: 15vh;
+}
+
+.card {
+    width: 400px;
+    margin: auto;
+    text-align: center;
+}

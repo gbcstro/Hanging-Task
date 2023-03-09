@@ -158,7 +158,6 @@ export class DashboardComponent implements OnInit{
       }
     }).afterClosed().subscribe(response => {
       this.db.getSpecificTask(task.id).subscribe((res:any) =>{
-
         let taskObj: Task = {
           id: res.id,
           title: res.title,
