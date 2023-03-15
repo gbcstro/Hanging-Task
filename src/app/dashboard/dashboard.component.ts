@@ -19,6 +19,7 @@ import { DeleteTaskComponent } from '../delete-task/delete-task.component';
 export class DashboardComponent implements OnInit{ 
 
   user =  JSON.parse(localStorage.getItem('user')!);
+  token = JSON.stringify(localStorage.getItem('token'));
 
   public userList: any = [];
   public selectedUser: string = '';
@@ -36,19 +37,30 @@ export class DashboardComponent implements OnInit{
   }
 
   ngOnInit(): void {
+
+    this.isTokenExpired(this.token);
+
     this.getTask();
+    this.db.pushRefresh.subscribe(() => {
+      this.getTask();
+    });
     
     this.auth.getUser().subscribe(res => {
-      console.log(res);
       this.userList = res;
     });
 
   }
 
+  private isTokenExpired(token: string){
+    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    if ((Math.floor((new Date).getTime() / 1000)) >= expiry ){
+      this.logout();
+    } 
+  }
+
   select(first: string, last: string){
     this.selectedUser = `${first} ${last}`;
   }
-
 
   drop(event: CdkDragDrop<any[]>, selector: string) {
    
@@ -95,21 +107,6 @@ export class DashboardComponent implements OnInit{
           assign_to: assign
         }
 
-        const ongoignList: Task = {
-          id: d.id,
-          title: d.title,
-          description: d.description,
-          status: 'ongoing',
-          created_by: d.created_by,
-          assign_to: assign
-        }
-
-        this.ongoing.forEach((value, index)=>{
-          if(value.id==d.id) {
-            this.ongoing[index] = ongoignList;
-          };
-        });
-
         this.db.editTask(d.id, taskOnObj);
 
       }
@@ -131,22 +128,6 @@ export class DashboardComponent implements OnInit{
   addDialog(){
     return this.dialog.open(AddTaskComponent,{
       width: '600px',
-    }).afterClosed().subscribe((res: any) => {
-        if(localStorage.getItem('id') != null){
-          let id = localStorage.getItem('id');
-          this.db.getSpecificTask(id).subscribe((res: any) => {
-            let taskObj: Task = {
-              id: res.id,
-              title: res.title,
-              description: res.description,
-              status: res.status,
-              created_by: res.created_by,
-              assign_to: res.assign_to
-            }
-            this.todo.push(taskObj);
-          });
-          localStorage.removeItem('id');
-        }
     });
   }
 
@@ -156,41 +137,6 @@ export class DashboardComponent implements OnInit{
       data: {
         task: task,
       }
-    }).afterClosed().subscribe(response => {
-      this.db.getSpecificTask(task.id).subscribe((res:any) =>{
-        let taskObj: Task = {
-          id: res.id,
-          title: res.title,
-          description: res.description,
-          status: res.status,
-          created_by: res.created_by,
-          assign_to: res.assign_to
-        }
-
-        if (res.status === 'todo') {
-          this.todo.forEach((value,index)=>{
-            if(value.id==res.id) {
-              this.todo[index] = taskObj;
-            };
-          });
-        }
-        else if (res.status === 'ongoing') {
-          this.ongoing.forEach((value,index)=>{
-            if(value.id==res.id) {
-              this.ongoing[index] = taskObj;
-            };
-          });
-        }
-        else if (res.status === 'done') {
-          this.done.forEach((value,index)=>{
-            if(value.id==res.id){
-              this.done[index] = taskObj;
-            };
-          });
-        }
-      
-      });
-
     });
 
   }
@@ -201,44 +147,14 @@ export class DashboardComponent implements OnInit{
       data: {
         task: task,
       }
-    }).afterClosed().subscribe(res => {
-        try {
-          let id = res.data.id
-
-          if (task.status === 'todo') {
-            this.todo.forEach((value,index)=>{
-              if(value.id==id) this.todo.splice(index,1);
-            });
-          }
-          else if (task.status === 'ongoing') {
-            this.ongoing.forEach((value,index)=>{
-              if(value.id==id) this.ongoing.splice(index,1);
-            });
-          }
-          else if (task.status === 'done') {
-            this.done.forEach((value,index)=>{
-              if(value.id==id) this.done.splice(index,1);
-            });
-          }
-        } catch (error) {
-          return
-        }
     });
   }
 
   getTask(){
     this.db.getTasks().subscribe((res: any) => {
-      res.forEach((task: any) => {
-        if (task.status == 'todo'){
-          this.todo.push(task);
-        }
-        else if (task.status == 'ongoing'){
-          this.ongoing.push(task);
-        }
-        else if (task.status == 'done'){
-          this.done.push(task);
-        }
-      });
+      this.todo = res.filter((task: any) => task.status === 'todo');
+      this.ongoing = res.filter((task: any) => task.status === 'ongoing');
+      this.done = res.filter((task: any) => task.status === 'done');
     });
   }
 

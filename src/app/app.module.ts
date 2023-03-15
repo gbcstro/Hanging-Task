@@ -29,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataService } from './services/data.service';
 import { DeleteTaskComponent } from './delete-task/delete-task.component';
 import { EmailVerifyComponent } from './email-verify/email-verify.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { EmailVerifyComponent } from './email-verify/email-verify.component';
     AddTaskComponent,
     EditTaskComponent,
     DeleteTaskComponent,
-    EmailVerifyComponent
+    EmailVerifyComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

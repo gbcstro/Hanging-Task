@@ -1,6 +1,5 @@
 .content {
     width: 400px;
-
 }
 
 h1 {
@@ -37,7 +36,13 @@ mat-form-field input {
     font-size: 16px;
 }
 
-.footer {
-    padding: 12px;
-    text-align: center;
+
+.forget{
+    padding-top: 12px;
+}
+
+.forget a{
+    font-size: 16px;
+    cursor: pointer;
+    color: blue;
 }

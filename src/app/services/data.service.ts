@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject, tap } from 'rxjs';
 
 const BACKEND_DOMAIN = 'http://127.0.0.1:8000/';
 
@@ -8,59 +9,68 @@ const BACKEND_DOMAIN = 'http://127.0.0.1:8000/';
 })
 export class DataService {
 
-    id: any;
+  private refresh = new Subject<void>();
 
-    constructor(
-      private http: HttpClient,
-    ) { }
+  constructor(
+    private http: HttpClient,
+  ) { }
 
-    createTask(task: any){
-      this.http.post(this.buildURL('/api/add'), task).subscribe({
-        next: (res: any) => {
-          let task = res.task;
-          localStorage.setItem('id',task.id);
-        },
-        error: err => {
-          console.log(err);
-        }
-      });
-    }
+  get pushRefresh(){
+    return this.refresh;
+  }
 
-    getTasks(){
-      return this.http.get(this.buildURL('/api/tasks'));
-    }
+  createTask(task: any){
+    this.http.post(this.buildURL('/api/add'), task).subscribe({
+      next: (res) => {
+        this.refresh.next();
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
 
-    getSpecificTask(id: any){
-      return this.http.get(this.buildURL(`/api/task/${id}`));
-    }
+  getTasks(){
+    return this.http.get(this.buildURL('/api/tasks'));
+  }
 
-    editTask(id: any, task: any){
-      return this.http.put(this.buildURL(`/api/update/${id}`), task).subscribe({
-        error: err => {
-          console.log(err);
-        }
-      });
-    }
+  getSpecificTask(id: any){
+    return this.http.get(this.buildURL(`/api/task/${id}`));
+  }
 
-    assignTask(id: any, task: any){
-      return this.http.put(this.buildURL(`/api/update/{id}/assign`), task).subscribe({
-        error: err => {
-          console.log(err);
-        }
-      });
-    }
+  editTask(id: any, task: any){
+    return this.http.put(this.buildURL(`/api/update/${id}`), task).subscribe({
+      next: (res) => {
+        this.refresh.next();
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
 
-    deleteTask(id: any){
-      return this.http.delete(this.buildURL(`/api/delete/${id}`)).subscribe({
-        error: err => {
-          console.log(err);
-        }
-      });
-    }
-    
-    buildURL(path: any){
-      return BACKEND_DOMAIN + path;
-    }
+  // assignTask(id: any, task: any){
+  //   return this.http.put(this.buildURL(`/api/update/{id}/assign`), task).subscribe({
+  //     error: err => {
+  //       console.log(err);
+  //     }
+  //   });
+  // }
+
+  deleteTask(id: any){
+    return this.http.delete(this.buildURL(`/api/delete/${id}`)).subscribe({
+      next: (res) => {
+        this.refresh.next();
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+  
+  buildURL(path: any){
+    return BACKEND_DOMAIN + path;
+  }
 
 
 }
