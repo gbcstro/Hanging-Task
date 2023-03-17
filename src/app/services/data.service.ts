@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, tap } from 'rxjs';
+import { Subject } from 'rxjs';
+import { NgToastService } from 'ng-angular-popup';
 
 const BACKEND_DOMAIN = 'http://127.0.0.1:8000/';
 
@@ -13,19 +14,21 @@ export class DataService {
 
   constructor(
     private http: HttpClient,
+    private toast: NgToastService
   ) { }
 
   get pushRefresh(){
     return this.refresh;
-  }
+  } 
 
   createTask(task: any){
     this.http.post(this.buildURL('/api/add'), task).subscribe({
-      next: (res) => {
-        this.refresh.next();
-      },
-      error: err => {
-        console.log(err);
+      next: (res: any) => {
+        const success: boolean = res.success;
+        if(success){
+          this.toast.success({detail:'Task: '+task.title, summary:res.message, duration:2500,});
+          this.refresh.next();
+        }
       }
     });
   }
@@ -40,31 +43,25 @@ export class DataService {
 
   editTask(id: any, task: any){
     return this.http.put(this.buildURL(`/api/update/${id}`), task).subscribe({
-      next: (res) => {
-        this.refresh.next();
-      },
-      error: err => {
-        console.log(err);
+      next: (res: any) => {
+        const success: boolean = res.success;
+        if(success){
+          this.toast.info({detail:'Task: '+ task.title, summary:res.message, duration:2500});
+          this.refresh.next();
+        }
       }
     });
   }
 
-  // assignTask(id: any, task: any){
-  //   return this.http.put(this.buildURL(`/api/update/{id}/assign`), task).subscribe({
-  //     error: err => {
-  //       console.log(err);
-  //     }
-  //   });
-  // }
-
   deleteTask(id: any){
     return this.http.delete(this.buildURL(`/api/delete/${id}`)).subscribe({
-      next: (res) => {
-        this.refresh.next();
+      next: (res: any) => {
+        const success: boolean = res.success;
+        if(success){
+          this.toast.warning({detail:'DELETE ', summary:res.message, duration:2500});
+          this.refresh.next();
+        }
       },
-      error: err => {
-        console.log(err);
-      }
     });
   }
   

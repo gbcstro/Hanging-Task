@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { LandingPageComponent } from '../landing-page/landing-page.component';
 import { AuthService } from '../services/auth.service';
 
 export function passMatchValidator(): ValidatorFn{

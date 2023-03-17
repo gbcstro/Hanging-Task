@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataService } from '../services/data.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-edit-task',
@@ -20,7 +21,7 @@ export class EditTaskComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private db: DataService,
-    private dialog: MatDialogRef<EditTaskComponent>
+    public dialog: MatDialogRef<EditTaskComponent>
   ) { }
 
   ngOnInit(): void {

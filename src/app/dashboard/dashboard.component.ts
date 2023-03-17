@@ -128,6 +128,7 @@ export class DashboardComponent implements OnInit{
   addDialog(){
     return this.dialog.open(AddTaskComponent,{
       width: '600px',
+      position: {top:'15vh'},
     });
   }
 
@@ -136,7 +137,8 @@ export class DashboardComponent implements OnInit{
       width: '600px',
       data: {
         task: task,
-      }
+      },
+      position: {top:'15vh'},
     });
 
   }

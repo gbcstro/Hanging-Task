@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { DataService } from '../services/data.service';
-import { Task } from '../model/task';
 
 @Component({
   selector: 'app-add-task',
@@ -19,7 +19,7 @@ export class AddTaskComponent implements OnInit {
   });
 
   constructor(
-    private dialogRef: MatDialogRef<AddTaskComponent>,
+    public dialogRef: MatDialogRef<AddTaskComponent>,
     private db: DataService,
   ) { }
 

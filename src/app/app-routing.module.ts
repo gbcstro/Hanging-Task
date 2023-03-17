@@ -6,6 +6,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AuthGuard } from './services/guard/auth.guard';
 import { LoginGuard } from './services/guard/login.guard';
 import { ConfirmEmailGuard } from './services/guard/confirm-email.guard';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
     path: 'email/verify',
     component:EmailVerifyComponent,
     canActivate: [ConfirmEmailGuard]
+  },
+  {
+    path: 'email/password/reset',
+    component:ResetPasswordComponent,
   },
   {
     path: '**',
