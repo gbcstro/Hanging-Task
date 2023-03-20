@@ -26,15 +26,15 @@ export class DataService {
       next: (res: any) => {
         const success: boolean = res.success;
         if(success){
-          this.toast.success({detail:'Task: '+task.title, summary:res.message, duration:2500,});
+          this.toast.success({detail:'Task: '+task.title, summary:res.message, duration:2500});
           this.refresh.next();
         }
       }
     });
   }
 
-  getTasks(){
-    return this.http.get(this.buildURL('/api/tasks'));
+  getTasks(params: any){
+    return this.http.post(this.buildURL('/api/tasks'), params);
   }
 
   getSpecificTask(id: any){

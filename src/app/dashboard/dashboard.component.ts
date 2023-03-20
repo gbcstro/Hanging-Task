@@ -1,15 +1,14 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import {CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { Component, Input, OnInit} from '@angular/core';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../services/auth.service';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { Task } from '../model/task';
 import { DataService } from '../services/data.service';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Database } from '@angular/fire/database';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
-import { ActivatedRoute, Router } from '@angular/router';
 import { DeleteTaskComponent } from '../delete-task/delete-task.component';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +21,11 @@ export class DashboardComponent implements OnInit{
   token = JSON.stringify(localStorage.getItem('token'));
 
   public userList: any = [];
-  public selectedUser: string = '';
+
+  @Input() searchData: any = ''
+  searchObj: any = {
+    search: this.searchData
+  };
 
   todo: Task[] = [];
   ongoing: Task[] = [];
@@ -32,6 +35,7 @@ export class DashboardComponent implements OnInit{
     private dialog: MatDialog,
     public auth: AuthService,
     public db: DataService,
+    private router: Router
   ) { 
     
   }
@@ -39,10 +43,9 @@ export class DashboardComponent implements OnInit{
   ngOnInit(): void {
 
     this.isTokenExpired(this.token);
-
-    this.getTask();
+    this.getTask(this.searchObj);
     this.db.pushRefresh.subscribe(() => {
-      this.getTask();
+      this.getTask(this.searchObj);
     });
     
     this.auth.getUser().subscribe(res => {
@@ -54,13 +57,39 @@ export class DashboardComponent implements OnInit{
   private isTokenExpired(token: string){
     const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
     if ((Math.floor((new Date).getTime() / 1000)) >= expiry ){
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.router.navigate(['']);
       this.logout();
     } 
   }
 
-  select(first: string, last: string){
-    this.selectedUser = `${first} ${last}`;
+  select(name: string){
+    if(name !== 'none'){
+      this.searchObj = {
+        user: name
+      }
+      this.getTask(this.searchObj);
+    } else {
+      this.searchObj = '';
+      this.getTask(this.searchObj);
+    }
+    
   }
+
+  onSearch(params: any){
+    if(params !== ''){
+      this.searchObj = {
+        search: params
+      }
+      this.getTask(this.searchObj);
+    } else {
+      this.searchObj = '';
+      this.getTask(this.searchObj);
+    }
+    
+  }
+
 
   drop(event: CdkDragDrop<any[]>, selector: string) {
    
@@ -152,11 +181,13 @@ export class DashboardComponent implements OnInit{
     });
   }
 
-  getTask(){
-    this.db.getTasks().subscribe((res: any) => {
+  getTask(search: any){
+
+    this.db.getTasks(this.searchObj).subscribe((res: any) => {
       this.todo = res.filter((task: any) => task.status === 'todo');
       this.ongoing = res.filter((task: any) => task.status === 'ongoing');
       this.done = res.filter((task: any) => task.status === 'done');
+
     });
   }
 
