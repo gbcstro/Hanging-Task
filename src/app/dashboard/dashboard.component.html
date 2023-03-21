@@ -22,15 +22,16 @@
   <div class="content"> 
 
       <div class="filter">
-        <button mat-raised-button [matMenuTriggerFor]="menu">User</button>
+        <button mat-raised-button [matMenuTriggerFor]="menu">User<mat-icon>arrow_drop_down</mat-icon></button>
         <mat-menu #menu="matMenu">
           <mat-option (click)="select('none')">All</mat-option>
           <mat-option *ngFor="let user of userList" (click)="select(user.first_name+' '+user.last_name)">
             {{user.first_name}} {{user.last_name}}
           </mat-option>
         </mat-menu>
+
         <div class="search">
-          <input matInput #search autocomplete="off" placeholder="Search..." [(ngModel)]="searchData">
+          <input autocomplete="off" placeholder="Search..." [(ngModel)]="searchData" (input)="onSearch(searchData)">
           <button (click)="onSearch(searchData)"><mat-icon style="color: black; cursor: pointer;">search</mat-icon></button>
         </div>
       </div>

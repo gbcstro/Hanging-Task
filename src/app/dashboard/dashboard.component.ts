@@ -9,6 +9,7 @@ import { EditTaskComponent } from '../edit-task/edit-task.component';
 import { DeleteTaskComponent } from '../delete-task/delete-task.component';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import {Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,10 +23,12 @@ export class DashboardComponent implements OnInit{
 
   public userList: any = [];
 
-  @Input() searchData: any = ''
+  @Input() searchData: any = '';
   searchObj: any = {
     search: this.searchData
   };
+
+  inputValue = new Subject<void>();
 
   todo: Task[] = [];
   ongoing: Task[] = [];
@@ -55,6 +58,7 @@ export class DashboardComponent implements OnInit{
   }
 
   private isTokenExpired(token: string){
+
     const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
     if ((Math.floor((new Date).getTime() / 1000)) >= expiry ){
       localStorage.removeItem('token');
@@ -62,9 +66,11 @@ export class DashboardComponent implements OnInit{
       this.router.navigate(['']);
       this.logout();
     } 
+
   }
 
   select(name: string){
+
     if(name !== 'none'){
       this.searchObj = {
         user: name
@@ -78,11 +84,12 @@ export class DashboardComponent implements OnInit{
   }
 
   onSearch(params: any){
+
     if(params !== ''){
       this.searchObj = {
         search: params
       }
-      this.getTask(this.searchObj);
+      this.inputValue.next(this.getTask(this.searchObj));
     } else {
       this.searchObj = '';
       this.getTask(this.searchObj);
@@ -95,6 +102,7 @@ export class DashboardComponent implements OnInit{
    
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -118,7 +126,6 @@ export class DashboardComponent implements OnInit{
       }
       
       if (selector == 'ongoing'){
-
         let name = this.user.first_name + ' ' + this.user.last_name;
         let assign;
         
@@ -150,8 +157,8 @@ export class DashboardComponent implements OnInit{
         }
         this.db.editTask(d.id, taskObj);
       }
-  
     }
+
   }
 
   addDialog(){
@@ -182,11 +189,11 @@ export class DashboardComponent implements OnInit{
   }
 
   getTask(search: any){
-
-    this.db.getTasks(this.searchObj).subscribe((res: any) => {
+    this.db.getTasks(search).subscribe((res: any) => {
       this.todo = res.filter((task: any) => task.status === 'todo');
       this.ongoing = res.filter((task: any) => task.status === 'ongoing');
       this.done = res.filter((task: any) => task.status === 'done');
+      console.log(this.todo);
 
     });
   }

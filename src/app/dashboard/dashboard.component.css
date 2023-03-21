@@ -24,9 +24,21 @@
   align-items: center;
 }
 
+.filter button {
+  padding: 3px 16px;
+  font-size: 16px;
+  width: 80px;
+}
+
+.filter button mat-icon{
+  font-size: 22px;
+  margin-right: 12px;
+}
+
 .filter .search {
   margin-left: 12px;
   background-color: white;
+  height: 31px;
   padding: 7px;
   border-radius: 17px;
   display: flex;
@@ -88,6 +100,7 @@
     border-radius: 5px;
     overflow-y: auto;
     display: block;
+    padding-bottom: 12px;
 }
 
 .example-list h2 {
