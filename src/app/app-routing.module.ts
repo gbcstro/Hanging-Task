@@ -1,30 +1,38 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EmailVerifyComponent } from './email-verify/email-verify.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AuthGuard } from './services/guard/auth.guard';
-import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard'
-import { AngularFireAuthGuard } from '@angular/fire/compat/auth-guard';
-
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['landing']);
+import { LoginGuard } from './services/guard/login.guard';
+import { ConfirmEmailGuard } from './services/guard/confirm-email.guard';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/landing',
-    pathMatch: 'full'
-  },
-  {
-    path: 'landing',
     component: LandingPageComponent,
+    pathMatch: 'full',
+    canActivate: [LoginGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [ AngularFireAuthGuard ],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
-    
+    canActivate: [AuthGuard]
   },
+  {
+    path: 'email/verify',
+    component:EmailVerifyComponent,
+    canActivate: [ConfirmEmailGuard]
+  },
+  {
+    path: 'email/password/reset',
+    component:ResetPasswordComponent,
+  },
+  {
+    path: '**',
+    redirectTo: ''
+  }
 ];
 
 @NgModule({

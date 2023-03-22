@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
     <h1>Hanging Task</h1>
     <span class="example-spacer"></span>
-    <button mat-raised-button (click)="signout()">
+    <button mat-raised-button (click)="logout()">
       Sign Out
     </button>
 </mat-toolbar>
@@ -20,22 +20,37 @@
   </div>
   
   <div class="content"> 
-      <div cdkDropListGroup>
 
+      <div class="filter">
+        <button mat-raised-button [matMenuTriggerFor]="menu">User<mat-icon>arrow_drop_down</mat-icon></button>
+        <mat-menu #menu="matMenu">
+          <mat-option (click)="select('none')">All</mat-option>
+          <mat-option *ngFor="let user of userList" (click)="select(user.first_name+' '+user.last_name)">
+            {{user.first_name}} {{user.last_name}}
+          </mat-option>
+        </mat-menu>
+
+        <div class="search">
+          <input autocomplete="off" placeholder="Search..." [(ngModel)]="searchData" (input)="onSearch(searchData)">
+          <button (click)="onSearch(searchData)"><mat-icon style="color: black; cursor: pointer;">search</mat-icon></button>
+        </div>
+      </div>
+    
+      <div cdkDropListGroup>
           <div class="example-container">
-            <h2>To do</h2>
             <div
               cdkDropList
               [cdkDropListData]="todo"
               class="example-list"
-              (cdkDropListDropped)="drop($event)">
+              (cdkDropListDropped)="drop($event, 'todo')">
+              <h2>To do</h2>
               <div class="example-box" *ngFor="let task of todo" cdkDrag>
                 <mat-card>
-                  <h3>{{ task.title.toUpperCase() }}</h3>
+                  <h3>{{ task.title }}</h3>
                   <span> {{ task.description }}</span>
                   <mat-card-actions>
-                    <button mat-raised-button color="primary" (click)="editDialog(task,'-todo')">Edit</button>
-                    <button mat-raised-button color="warn" (click)="db.delCreateTask(task)" >Delete</button>
+                    <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
+                    <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
                   </mat-card-actions>
                 </mat-card>
               </div>
@@ -43,46 +58,57 @@
          </div>
 
         <div class="example-container">
-            <h2>Ongoing</h2>
             <div
               cdkDropList
               [cdkDropListData]="ongoing"
               class="example-list"
-              (cdkDropListDropped)="drop($event)">
+              (cdkDropListDropped)="drop($event, 'ongoing')">
+              <h2>Ongoing</h2>
               <div class="example-box" *ngFor="let task of ongoing" cdkDrag>
                 <mat-card>
-                  <h3>{{ task.title.toUpperCase() }}</h3>
+                  <h3>{{ task.title }}</h3>
                   <span> {{ task.description }}</span>
-                
+                  <div class="assign">
+                    <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
+                  </div>
                   <mat-card-actions>
                     <div class="button-wrapper">
-                      <button mat-raised-button color="primary" (click)="editDialog(task,'-ongoing')">Edit</button>
+                      <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
                     </div>
                     <div class="button-wrapper">
-                      <button mat-raised-button color="warn" (click)="db.delOnGoingTask(task)">Delete</button>
+                      <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
                     </div>
                   </mat-card-actions>
                 </mat-card>
+
               </div>
             </div>
           </div>
 
           <div class="example-container">
-            <h2>Done</h2>
             <div
               cdkDropList
               [cdkDropListData]="done"
               class="example-list"
-              (cdkDropListDropped)="drop($event)">
+              (cdkDropListDropped)="drop($event, 'done')">
+              <h2>Done</h2>
               <div class="example-box" *ngFor="let task of done" cdkDrag>
                 <mat-card>
-                  <h3>{{ task.title.toUpperCase() }}</h3>
+                  <h3>{{ task.title }}</h3>
                   <span> {{ task.description }}</span>
+                  <div class="assign">
+                    <span style="font-size: 16px;">Assign to: {{ task.assign_to }}</span>
+                  </div>
                   <mat-card-actions>
-                    <button mat-raised-button color="primary" (click)="editDialog(task,'-done')">Edit</button>
-                    <button mat-raised-button color="warn" (click)="db.delDoneTask(task)">Delete</button>
+                    <div class="button-wrapper">
+                      <button mat-raised-button color="primary" (click)="editDialog(task)">Edit</button>
+                    </div>
+                    <div class="button-wrapper">
+                      <button mat-raised-button color="warn" (click)="delete(task)">Delete</button>
+                    </div>
                   </mat-card-actions>
                 </mat-card>
+
               </div>
             </div>
           </div>

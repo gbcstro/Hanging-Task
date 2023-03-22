@@ -1,3 +1,12 @@
+.mat-toolbar{
+  padding: 32px;
+}
+
+.mat-toolbar button:hover{
+  background-color: rgb(244,67,54);
+  color: white;
+}
+
 .example-spacer {
   flex: 1 1 auto;
 }
@@ -9,6 +18,47 @@
   width: 100%;
 }
 
+.filter {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.filter button {
+  padding: 3px 16px;
+  font-size: 16px;
+  width: 80px;
+}
+
+.filter button mat-icon{
+  font-size: 22px;
+  margin-right: 12px;
+}
+
+.filter .search {
+  margin-left: 12px;
+  background-color: white;
+  height: 31px;
+  padding: 7px;
+  border-radius: 17px;
+  display: flex;
+  align-items: center;
+  width: 140px;
+}
+
+.search button{
+  background-color: transparent;
+}
+
+.search input{
+  font-size: 16px;
+  width: 100px;
+}
+
+.search input:focus{
+  outline: none;
+}
+
 .top-content {
   padding: 12px;
   display: flex;
@@ -17,8 +67,8 @@
 }
 
 .content{
-  display: flex;
-  justify-content: center;
+  margin-left: 17%;
+ 
 }
 
 .button-wrapper {
@@ -29,6 +79,12 @@
   font-size: 18px;
 }
 
+.top-content button:hover {
+  font-size: 18px;
+  background-color: rgb(185,148,223);
+  color: white;
+}
+
 .example-container {
     width: 400px;
     max-width: 100%;
@@ -37,30 +93,42 @@
     vertical-align: top;
     color: white;
 }
-  
+
 .example-list {
-    border: solid 2px rgb(255, 255, 255);
     height: 75vh;
-    background: white;
+    background: rgb(215,167,225);
     border-radius: 5px;
     overflow-y: auto;
     display: block;
+    padding-bottom: 12px;
+}
+
+.example-list h2 {
+  padding: 12px;
+  margin-bottom: -10px;
+  color: black;
+}
+
+.example-list::-webkit-scrollbar {
+  display: none;
 }
   
 .example-box {
-  padding: 5px 10px;
+  padding: 4px 12px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   cursor: move;
-  background: transparent;
   font-size: 14px;
 }
 
 .mat-card {
+  background-color: rgba(255, 255, 255, 0.452);
+  padding: 18px;
   width: 400px;
+  color: black;
 }
 
 .mat-card h3 {
@@ -69,16 +137,17 @@
 }
 
 .mat-card span {
-  font-size: 17px;
+  font-size: 18px;
 }
-  
+
+.mat-card .assign {
+  padding-top: 8px;
+  font-size: 18px;
+}
   
 .cdk-drag-preview {
   box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;  
 }
 
 .cdk-drag-placeholder {
@@ -86,7 +155,7 @@
 }
 
 .cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 250ms;
 }
 
 .example-box:last-child {
@@ -94,10 +163,14 @@
 }
 
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 250ms;
 }
 
 .mat-card-actions {
   display: flex;
   justify-content: right;
+}
+
+.mat-card-actions button:hover {
+  background-color: black;
 }

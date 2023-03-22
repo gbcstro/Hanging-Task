@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class LoginDialogComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private dialog: MatDialogRef<LoginDialogComponent>,
+    private matDialog: MatDialog,
   ) { }
 
   onNoClick(): void {
@@ -25,10 +27,22 @@ export class LoginDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+  }
+
+  forgotPassword(){
+    let email = this.email;
+
+    this.dialog.close();
+    return this.matDialog.open(ForgotPasswordComponent,{
+      disableClose: true,
+      data: email,
+      position: {top:'20vh'},
+    });
   }
 
   get email(){
-    return this.loginForm.get('email')
+    return this.loginForm.get('email');
   }
 
   get password() {
@@ -42,8 +56,13 @@ export class LoginDialogComponent implements OnInit {
     if(!this.loginForm.valid || !email || !password){
       return;
     }
-    
-    this.auth.SignIn(email, password);
+
+    const loginObj = {
+      email: email,
+      password: password
+    };
+
+    this.auth.login(loginObj);
     this.dialog.close();
   }
 

@@ -1,94 +1,73 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Task } from '../model/task';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { NgToastService } from 'ng-angular-popup';
+
+const BACKEND_DOMAIN = 'http://127.0.0.1:8000/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+
+  private refresh = new Subject<void>();
+
   constructor(
-    private afs: AngularFirestore,
-  ) { 
-    
+    private http: HttpClient,
+    private toast: NgToastService
+  ) { }
+
+  get pushRefresh(){
+    return this.refresh;
+  } 
+
+  createTask(task: any){
+    this.http.post(this.buildURL('/api/add'), task).subscribe({
+      next: (res: any) => {
+        const success: boolean = res.success;
+        if(success){
+          this.toast.success({detail:'Task: '+task.title, summary:res.message, duration:2500});
+          this.refresh.next();
+        }
+      }
+    });
+  }
+
+  getTasks(params: any){
+    return this.http.post(this.buildURL('/api/tasks'), params);
+  }
+
+  getSpecificTask(id: any){
+    return this.http.get(this.buildURL(`/api/task/${id}`));
+  }
+
+  editTask(id: any, task: any){
+    return this.http.put(this.buildURL(`/api/update/${id}`), task).subscribe({
+      next: (res: any) => {
+        const success: boolean = res.success;
+        if(success){
+          this.toast.info({detail:'Task: '+ task.title, summary:res.message, duration:2500});
+          this.refresh.next();
+        }
+      }
+    });
+  }
+
+  deleteTask(id: any){
+    return this.http.delete(this.buildURL(`/api/delete/${id}`)).subscribe({
+      next: (res: any) => {
+        const success: boolean = res.success;
+        if(success){
+          this.toast.warning({detail:'DELETE ', summary:res.message, duration:2500});
+          this.refresh.next();
+        }
+      },
+    });
   }
   
-  uid = localStorage.getItem('user-uid');
-
-  
-  // Todo
-  createTask(task: Task){
-    task.id = this.afs.createId();
-    return this.afs.collection(this.uid + '-todo').add(task);
+  buildURL(path: any){
+    return BACKEND_DOMAIN + path;
   }
 
-  recreateTask(task: Task){
-    return this.afs.collection(this.uid + '-todo').add(task);
-  }
-
-  readCreateTask(){
-    return this.afs.collection(this.uid +'-todo').snapshotChanges();
-  }
-
-  delCreateTask(task: Task){
-    return this.afs.doc(this.uid + '-todo' + '/' + task.id).delete();
-  }
-
-  // Ongoing
-  ongoingTask(task: Task){
-    return this.afs.collection(this.uid + '-ongoing').add(task);
-  }
-
-  readOnGoingTask(){
-    return this.afs.collection(this.uid + '-ongoing').snapshotChanges();
-  }
-
-  delOnGoingTask(task: Task){
-    return this.afs.doc(this.uid + '-ongoing' + '/' + task.id).delete();
-  }
-
-
-  // Done
-  doneTask(task: Task){
-    return this.afs.collection(this.uid + '-done').add(task);
-  }
-
-  readDoneTask(){
-    return this.afs.collection(this.uid + '-done').snapshotChanges();
-  }
-
-  
-  delDoneTask(task: Task){
-    return this.afs.doc(this.uid + '-done' + '/' + task.id).delete();
-  }
-
-  //Edit Task
-  editTask(task: Task, selector: string, title: any, description: any){
-  
-    if(selector === '-todo'){
-      return this.afs.doc(this.uid + selector + '/' + task.id).update({
-        title: title,
-        description: description,
-      });
-    }
-
-    else if(selector === '-ongoing'){
-      return this.afs.doc(this.uid + selector + '/' + task.id).update({
-        title: title,
-        description: description,
-      });
-    }
-
-     else if(selector === '-done'){
-      return this.afs.doc(this.uid + selector + '/' + task.id).update({
-        title: title,
-        description: description,
-      });
-    }
-
-    else {
-      return
-    }
-
-  }
 
 }

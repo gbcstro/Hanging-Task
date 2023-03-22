@@ -1,5 +1,6 @@
 <div class="content">
-    <h2>Edit Task</h2>
+    <mat-icon style="float: right; cursor: pointer;" color="warn" (click)="this.dialog.close()">cancel</mat-icon>
+    <h1 style="padding-top: 14px; font-weight: 550;">Edit Task</h1>
     <form [formGroup]="editForm" (ngSubmit)="submit()" >
 
         <div class="form-input">

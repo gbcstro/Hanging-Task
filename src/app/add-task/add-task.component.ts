@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { DataService } from '../services/data.service';
-import { Task } from '../model/task';
 
 @Component({
   selector: 'app-add-task',
@@ -11,7 +11,7 @@ import { Task } from '../model/task';
 })
 export class AddTaskComponent implements OnInit {
 
-  uid = localStorage.getItem('user-uid');
+  user = JSON.parse(localStorage.getItem('user')!);
 
   addTask = new FormGroup({
     title: new FormControl('',[Validators.required]),
@@ -19,8 +19,8 @@ export class AddTaskComponent implements OnInit {
   });
 
   constructor(
-    private dialogRef: MatDialogRef<AddTaskComponent>,
-    private data: DataService,
+    public dialogRef: MatDialogRef<AddTaskComponent>,
+    private db: DataService,
   ) { }
 
   ngOnInit(): void {
@@ -38,19 +38,24 @@ export class AddTaskComponent implements OnInit {
   get description() {
     return this.addTask.get('description');
   }
-
+ 
   submit(){
     const { title, description } = this.addTask.value;
 
-    const taskObj: Task = {
-      id: '',
-      title: title,
-      description: description
-    }
-
     if(this.addTask.value.description != '' && this.addTask.value.title != ''){
-      this.data.createTask(taskObj);
+
+      const taskObj = {
+        title: title,
+        description: description,
+        status: 'todo',
+        created_by: `${this.user.first_name} ${this.user.last_name}`,
+        assign_to: 'unassign'
+      }
+
+
+      this.db.createTask(taskObj);
       this.dialogRef.close();
+       
     }
 
   }

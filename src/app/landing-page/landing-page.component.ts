@@ -23,14 +23,14 @@ export class LandingPageComponent implements OnInit {
   loginDialog(){
     this.dialog.open(LoginDialogComponent,{
       height: 'auto',
-      
+      position: {top:'20vh'}
     });
   }
 
   signInDialog(){
     this.dialog.open(SignupDialogComponent, {
       height: 'auto',
-
+      position: {top:'13vh'}
     })
   }
 

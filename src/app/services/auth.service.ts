@@ -1,125 +1,126 @@
-import { Injectable, NgZone } from '@angular/core';
-import { User } from '../model/user';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import * as auth from 'firebase/auth';
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-} from '@angular/fire/compat/firestore';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import * as jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
+
+
+const BACKEND_DOMAIN = 'http://127.0.0.1:8000/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  userData: any; 
-  
+
   constructor(
-    public afs: AngularFirestore,
-    public afAuth: AngularFireAuth, 
-    public router: Router,
-    public ngZone: NgZone
-  ) {
-    this.afAuth.authState.subscribe((user) => {
-      if (user) {
-        this.userData = user;
-        localStorage.setItem('user', JSON.stringify(this.userData));
-        localStorage.setItem('user-uid', this.userData.uid);
-        JSON.parse(localStorage.getItem('user')!);
+    private _http: HttpClient,
+    private router: Router,
+    private toast: NgToastService,
+    ) { }
+
+  getUser(){
+    return this._http.get(this.buildURL('/api/user'));
+  }
+  
+  register(form: any) {
+    return this._http.post(this.buildURL('/api/register'), form).subscribe((res: any) => {
+
+      const success: boolean = res.success;
+      if(success){
+        this.toast.success({detail:"SUCCESS", summary:res.message, duration:2000});
       } else {
-        localStorage.setItem('user', 'null');
-        JSON.parse(localStorage.getItem('user')!);
+        this.toast.error({detail:"ERROR", summary:res.message, duration:2000});
       }
+
     });
   }
-  
-  SignIn(email: string, password: string) {
-    return this.afAuth
-      .signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.router.navigate(['dashboard']);
-        this.SetUserData(result.user);
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
-  }
-  
-  SignUp(email: string, password: string) {
-    return this.afAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.SendVerificationMail();
-        this.SetUserData(result.user);
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
-  }
-  
-  SendVerificationMail() {
-    return this.afAuth.currentUser.then((u: any) => u.sendEmailVerification());
-  }
-  
-  ForgotPassword(passwordResetEmail: string) {
-    return this.afAuth
-      .sendPasswordResetEmail(passwordResetEmail)
-      .then(() => {
-        window.alert('Password reset email sent, check your inbox.');
-      })
-      .catch((error) => {
-        window.alert(error);
-      });
-  }
- 
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    return user !== null ? true : false;
-  }
-  
-  GoogleAuth() {
-    return this.AuthLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-      if (res) {
-        this.router.navigate(['dashboard']);
-      }
-    });
-  }
-  
-  AuthLogin(provider: any) {
-    return this.afAuth
-      .signInWithPopup(provider)
-      .then((result) => {
-        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
+
+  login(form: any) {
+    return this._http.post(this.buildURL('/api/login'), form).subscribe((res: any) => {
+      const success: boolean = res.success;
+      if(success) {
+        localStorage.setItem('token',JSON.stringify(res.token.original.token));
+        let bearer = 'Bearer '+JSON.parse(localStorage.getItem('token')!);
+        let header = {
+          headers: new HttpHeaders().set('Authorization', bearer)
+        };
+
+        this._http.get(this.buildURL('/api/me'),header).subscribe({
+          next: (res: any) => {
+            localStorage.setItem('user',JSON.stringify(res));
+          }
         });
-        this.SetUserData(result.user);
-      })
-      .catch((error) => {
-        window.alert(error);
-      });
+        this.router.navigate(['/dashboard']);
+        this.toast.success({detail:"LOGIN", summary:res.message, duration:2000});
+      } else {
+        const code = res.code;
+        if(code == 401){
+          this.toast.warning({detail:"WARNING", summary:res.message, duration:2000});
+        } else {
+          this.toast.info({detail:"INFO", summary:res.message, duration:2000});
+        }
+        
+      }
+
+      
+    });
+
   }
-  
-  SetUserData(user: any) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
+
+  confirmEmail(token: any){
+    return this._http.post(this.buildURL('email/verify'), token).subscribe({
+      next: res => {
+        
+      },
+      error: err =>{
+        this.router.navigate(['dashboard']);
+      }
+
+    });
+  }
+
+  requestResetPass(email: any){
+    return this._http.post(this.buildURL('email/password/request-reset-password'), email).subscribe((res: any) => {
+      const success: boolean = res.success;
+      if(success){
+        this.toast.info({detail:"The request was sent to your email address", duration:2500});
+      } else {
+        this.toast.warning({detail:res.message, duration:2500});
+      }
+      
+    });
+  }
+
+  resetPassword(params: any){
+    return this._http.post(this.buildURL('email/password/reset-password'), params).subscribe((res: any) => {
+      const success: boolean = res.success;
+      if(success){
+        this.toast.success({detail:"Password Changed", summary:res.message, duration:2500});
+      } else {
+        this.toast.warning({detail:"Request Expired", summary:res.message, duration:2500});
+      }
+      this.router.navigate(['']); 
+      
+    });
+  }
+
+  logout(){
+    let bearer = 'Bearer '+JSON.parse(localStorage.getItem('token')!);
+    let header = {
+      headers: new HttpHeaders().set('Authorization', bearer)
     };
-    return userRef.set(userData, {
-      merge: true,
-    });
-  }
- 
-  SignOut() {
-    return this.afAuth.signOut().then(() => {
+    console.log(header.headers);
+    return this._http.get(this.buildURL('/api/logout'), header).subscribe((res: any) => {
+      localStorage.removeItem('token');
       localStorage.removeItem('user');
-      localStorage.removeItem('user-uid');
-      location.reload();
       this.router.navigate(['']);
-    });
+      this.toast.warning({detail:res.message, duration:2000});
+    })
+    
+  }
+
+  buildURL(path: any){
+    return BACKEND_DOMAIN + path;
   }
 
 }

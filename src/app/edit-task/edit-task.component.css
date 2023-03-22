@@ -14,6 +14,7 @@ mat-form-field input {
 
 mat-form-field textarea {
     padding: 8px;
+    height: 200px;
     font-size: 16px;
 }
 
