@@ -30,10 +30,11 @@ export class DeleteTaskComponent implements OnInit {
   }
 
   delete(){
-    this.db.deleteTask(this.task.id);
+    console.log(this.task.task_id)
+    this.db.deleteTask(this.task.task_id);
     this.dialog.close({
       data: {
-        id: this.task.id,
+        id: this.task.task_id,
       }
     });
   }

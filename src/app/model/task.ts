@@ -1,5 +1,5 @@
 export interface Task {
-    id: any,
+    task_id: any,
     title: any,
     description: any,
     status: any,

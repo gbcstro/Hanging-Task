@@ -8,6 +8,7 @@ const BACKEND_DOMAIN = 'http://127.0.0.1:8000/';
 @Injectable({
   providedIn: 'root'
 })
+
 export class DataService {
 
   private refresh = new Subject<void>();
@@ -22,7 +23,7 @@ export class DataService {
   } 
 
   createTask(task: any){
-    this.http.post(this.buildURL('/api/add'), task).subscribe({
+    this.http.post(this.buildURL('task/create'), task).subscribe({
       next: (res: any) => {
         const success: boolean = res.success;
         if(success){
@@ -34,15 +35,15 @@ export class DataService {
   }
 
   getTasks(params: any){
-    return this.http.post(this.buildURL('/api/tasks'), params);
+    return this.http.post(this.buildURL('task/index'), params);
   }
 
   getSpecificTask(id: any){
-    return this.http.get(this.buildURL(`/api/task/${id}`));
+    return this.http.get(this.buildURL(`task/index/${id}`));
   }
 
   editTask(id: any, task: any){
-    return this.http.put(this.buildURL(`/api/update/${id}`), task).subscribe({
+    return this.http.put(this.buildURL(`task/update/${id}`), task).subscribe({
       next: (res: any) => {
         const success: boolean = res.success;
         if(success){
@@ -54,7 +55,7 @@ export class DataService {
   }
 
   deleteTask(id: any){
-    return this.http.delete(this.buildURL(`/api/delete/${id}`)).subscribe({
+    return this.http.delete(this.buildURL(`task/delete/${id}`)).subscribe({
       next: (res: any) => {
         const success: boolean = res.success;
         if(success){

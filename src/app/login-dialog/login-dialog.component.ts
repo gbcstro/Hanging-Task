@@ -53,7 +53,7 @@ export class LoginDialogComponent implements OnInit {
 
     const { email, password } = this.loginForm.value;
     
-    if(!this.loginForm.valid || !email || !password){
+    if(!this.loginForm.valid){
       return;
     }
 

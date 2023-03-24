@@ -28,7 +28,8 @@ import { DeleteTaskComponent } from './delete-task/delete-task.component';
 import { EmailVerifyComponent } from './email-verify/email-verify.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { NgToastModule } from 'ng-angular-popup' 
+import { NgToastModule } from 'ng-angular-popup';
+import { AuthProvider } from './services/helper/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,7 @@ import { NgToastModule } from 'ng-angular-popup'
     MatSelectModule,
     HttpClientModule,
   ],
-  providers: [DataService, AuthService, AuthGuard],
+  providers: [DataService, AuthService, AuthGuard, AuthProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

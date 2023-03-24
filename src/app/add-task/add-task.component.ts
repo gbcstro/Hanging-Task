@@ -48,11 +48,9 @@ export class AddTaskComponent implements OnInit {
         title: title,
         description: description,
         status: 'todo',
-        created_by: `${this.user.first_name} ${this.user.last_name}`,
+        created_by: this.user.full_name,
         assign_to: 'unassign'
       }
-
-
       this.db.createTask(taskObj);
       this.dialogRef.close();
        

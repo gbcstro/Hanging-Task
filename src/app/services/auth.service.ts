@@ -19,11 +19,11 @@ export class AuthService {
     ) { }
 
   getUser(){
-    return this._http.get(this.buildURL('/api/user'));
+    return this._http.get(this.buildURL('auth/user'));
   }
   
   register(form: any) {
-    return this._http.post(this.buildURL('/api/register'), form).subscribe((res: any) => {
+    return this._http.post(this.buildURL('auth/register'), form).subscribe((res: any) => {
 
       const success: boolean = res.success;
       if(success){
@@ -36,16 +36,12 @@ export class AuthService {
   }
 
   login(form: any) {
-    return this._http.post(this.buildURL('/api/login'), form).subscribe((res: any) => {
+    return this._http.post(this.buildURL('auth/login'), form).subscribe((res: any) => {
+      localStorage.setItem('token',JSON.stringify(res.token.original.token));
+
       const success: boolean = res.success;
       if(success) {
-        localStorage.setItem('token',JSON.stringify(res.token.original.token));
-        let bearer = 'Bearer '+JSON.parse(localStorage.getItem('token')!);
-        let header = {
-          headers: new HttpHeaders().set('Authorization', bearer)
-        };
-
-        this._http.get(this.buildURL('/api/me'),header).subscribe({
+        this._http.get(this.buildURL('auth/me')).subscribe({
           next: (res: any) => {
             localStorage.setItem('user',JSON.stringify(res));
           }
@@ -59,9 +55,7 @@ export class AuthService {
         } else {
           this.toast.info({detail:"INFO", summary:res.message, duration:2000});
         }
-        
       }
-
       
     });
 
@@ -105,12 +99,7 @@ export class AuthService {
   }
 
   logout(){
-    let bearer = 'Bearer '+JSON.parse(localStorage.getItem('token')!);
-    let header = {
-      headers: new HttpHeaders().set('Authorization', bearer)
-    };
-    console.log(header.headers);
-    return this._http.get(this.buildURL('/api/logout'), header).subscribe((res: any) => {
+    return this._http.get(this.buildURL('auth/logout')).subscribe((res: any) => {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       this.router.navigate(['']);

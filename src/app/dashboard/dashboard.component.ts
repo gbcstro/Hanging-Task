@@ -47,6 +47,7 @@ export class DashboardComponent implements OnInit{
 
     this.isTokenExpired(this.token);
     this.getTask(this.searchObj);
+    
     this.db.pushRefresh.subscribe(() => {
       this.getTask(this.searchObj);
     });
@@ -122,11 +123,11 @@ export class DashboardComponent implements OnInit{
           assign_to: 'unassign'
         }
 
-        this.db.editTask(d.id, taskObj);
+        this.db.editTask(d.task_id, taskObj);
       }
       
       if (selector == 'ongoing'){
-        let name = this.user.first_name + ' ' + this.user.last_name;
+        let name = this.user.full_name;
         let assign;
         
         if(d.assign_to == 'unassign'){
@@ -143,7 +144,7 @@ export class DashboardComponent implements OnInit{
           assign_to: assign
         }
 
-        this.db.editTask(d.id, taskOnObj);
+        this.db.editTask(d.task_id, taskOnObj);
 
       }
 
@@ -155,7 +156,7 @@ export class DashboardComponent implements OnInit{
           created_by: d.created_by,
           assign_to: d.assign_to
         }
-        this.db.editTask(d.id, taskObj);
+        this.db.editTask(d.task_id, taskObj);
       }
     }
 
@@ -193,8 +194,6 @@ export class DashboardComponent implements OnInit{
       this.todo = res.filter((task: any) => task.status === 'todo');
       this.ongoing = res.filter((task: any) => task.status === 'ongoing');
       this.done = res.filter((task: any) => task.status === 'done');
-      console.log(this.todo);
-
     });
   }
 
